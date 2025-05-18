@@ -27,8 +27,6 @@ Supports **searching IPs, domains, URLs, and hashes** across dozens of open-sour
 
 ---
 
----
-
 ## 🧩 Example Use Cases
 
 - Investigate suspicious IPs/domains using 20+ intel feeds
