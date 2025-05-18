@@ -1,511 +1,559 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>OSINT</title>
-	<style>
-		body {
-			font-family: Arial, sans-serif;
-			background-color: #f2f2f2;
-			margin: 0;
-			padding: 0;
-		}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OSINT Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card-bg: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --radius: 0.75rem;
+      --gap: 1rem;
+      --transition: 0.3s ease;
+    }
+    [data-theme="dark"] {
+      --bg: #1f2937;
+      --card-bg: #2e3a47;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --primary: #60a5fa;
+      --primary-hover: #3b82f6;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: var(--gap);
+      transition: background var(--transition), color var(--transition);
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      padding: var(--gap) 0;
+      margin-bottom: var(--gap);
+      z-index: 10;
+    }
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    .toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 0.3rem;
+      transition: color var(--transition), background var(--transition);
+    }
+    .toggle:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    .search-bar,
+    .filter-bar {
+      display: flex;
+      max-width: 600px;
+      margin: 0 auto var(--gap);
+      gap: 0.5rem;
+    }
+    .search-bar input,
+    .filter-bar input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      transition: border-color var(--transition);
+    }
+    .search-bar input:focus,
+    .filter-bar input:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+    .search-bar button {
+      padding: 0.75rem 1.5rem;
+      background: var(--primary);
+      border: none;
+      border-radius: var(--radius);
+      color: #fff;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+    .search-bar button:hover {
+      background: var(--primary-hover);
+    }
+    .section {
+      margin-top: calc(var(--gap) * 2);
+    }
+    .section h2 {
+      font-size: 1.25rem;
+      margin-bottom: var(--gap);
+      color: var(--muted);
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 0.25rem;
+      transition: color var(--transition), border-color var(--transition);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--gap);
+    }
+    .card {
+      background: var(--card-bg);
+      padding: var(--gap);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      position: relative;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 5;
+    }
+    .card a {
+      display: block;
+      color: var(--primary);
+      font-weight: 500;
+      text-decoration: none;
+      margin-bottom: 0.5rem;
+      transition: color var(--transition);
+    }
+    .card a:hover {
+      color: var(--primary-hover);
+    }
+    .tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-0.5rem);
+      background: var(--text);
+      color: white;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition), transform var(--transition);
+    }
+    .card:hover .tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-0.75rem);
+	  
+    }
+	
+	[data-theme="dark"] .tooltip {
+		color: black; 
+	}
 
-		h1 {
-			margin-top: 10px;
-			text-align: center;
-			padding: 15px;
-			background-color: #ffffff;
-		}
-
-		form {
-			margin: 20px auto;
-			max-width: 600px;
-			background-color: #fff;
-			padding: 20px;
-			border-radius: 10px;
-			box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
-		}
-
-		label {
-			display: block;
-			margin-bottom: 10px;
-			font-weight: bold;
-			color: #555;
-		}
-
-		input[type="text"] {
-			width: 100%;
-			padding: 10px;
-			font-size: 16px;
-			border: 1px solid #ccc;
-			border-radius: 50px;
-			outline: none;
-			box-sizing: border-box;
-		}
-
-		input[type="submit"] {
-			display: block;
-			margin: 20px auto 0;
-			padding: 10px 20px;
-			font-size: 16px;
-			font-weight: bold;
-			background-color: #0077cc;
-			color: #fff;
-			border: none;
-			border-radius: 10px;
-			cursor: pointer;
-		}
-
-		input[type="submit"]:hover {
-			background-color: #0066b2;
-		}
-
-		h2 {
-			border: 1px solid #0c0c0c;
-			padding: 10px;
-			background-color: #ffffff;
-			margin: 10px 0;
-			text-align: center;
-			text-transform: uppercase;
-		}
-
-		ul {
-			list-style: none;
-			padding: 0;
-			margin: 0 auto;
-			max-width: 800px;
-			display: flex;
-			flex-wrap: wrap;
-			justify-content: center;
-			align-items: center;
-		}
-
-		li {
-			margin: 10px;
-			flex-basis: 200px;
-			flex-shrink: 0;
-			text-align: center;
-			background-color: #fff;
-			padding: 20px;
-			border-radius: 10px;
-			box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
-		}
-
-		a {
-			text-decoration: none;
-			color: #0077cc;
-			font-weight: bold;
-		}
-
-		a:hover {
-			text-decoration: underline;
-		}
-
-		.link {
-		position: relative;
-		}
-		.link:hover::before {
-			content: attr(title);
-			position: absolute;
-			bottom: 100%;
-			left: 50%;
-			transform: translateX(-50%);
-			padding: 0.5rem;
-			background-color: #f7f7f7;
-			border: 1px solid #ccc;
-			border-radius: 3px;
-			font-size: 0.8rem;
-			line-height: 1.2;
-			white-space: nowrap;
-		}
-	</style>
+  </style>
 </head>
-<body>
-	<h1>OSINT</h1>
-	<form onsubmit="updateLinks(event)">
-		<label for="search">Enter IP or URL:</label>
-		<input type="text" id="search" name="search" required>
-		<br><br>
-		<input type="submit" value="ADD" id='add-button'>
-	</form>
 
-	<br><br>
-	<h2>Search Results</h2>
-	<ul>
-		<li><a href="https://www.virustotal.com/gui/search/" target="_blank" id="virustotal-link" class="link" title="Analyse suspicious files, domains, IPs and URLs.">Virus Total</a></li>
-		
-		<li><a href="https://web-check.xyz/" target="_blank" id="web-check" class="link" title="All-in-one OSINT tool for analysing any website.">Web Check</a></li>
-		
-		<li><a href="https://intelx.io/?s=" target="_blank" id="intelx" class="link" title="A search engine, check the about page for the differences. ">IntelX</a></li>
-		
-		<li><a href="https://urlscan.io/search/#" target="_blank" id="urlscan" class="link" title=" A website that allows you to scan and analyze URLs for potential security threats.">urlscan.io</a></li>
-		
-		<li><a href="https://transparencyreport.google.com/safe-browsing/search?url=" target="_blank" id="transparencyreport" class="link" title="A service provided by Google that helps users identify and avoid dangerous websites.">Google Safe Browsing</a></li>
-		
-		<li><a href="https://urlhaus.abuse.ch/browse.php?search=" target="_blank" id="urlhaus" class="link" title="A project that collects, tracks, and shares information on malicious URLs.">URLhaus</a></li>	
-		
-		<li><a href="https://www.hybrid-analysis.com/search?query=" target="_blank" id="hybrid-analysis" class="link" title="A platform for malware analysis and threat intelligence.">Hybrid Analysis</a></li>	
-		
-		<li><a href="https://socradar.io/labs/ioc-radar/" target="_blank" id="socradarioc" class="link" title="Search IOC">Soc Radar IOC</a></li>
-		
-		<li><a href="https://pulsedive.com/ioc/" target="_blank" id="pulsedive" class="link" title="Pulsedive">Pulsedive</a></li>		
+<body data-theme="dark">
+  <header>
+    <h1>OSINT Dashboard</h1>
+    <button class="toggle" id="theme-toggle" aria-label="Toggle dark mode">🌓</button>
+  </header>
 
-		<li><a href="https://www.abuseipdb.com/check/" target="_blank" id="abuseipdb" class="link" title="A database of reported malicious IP addresses and their associated activities.">AbuseIPDB</a></li>	
-		
-		<li><a href="https://search.censys.io/search?resource=hosts&sort=RELEVANCE&per_page=25&virtual_hosts=EXCLUDE&q=" target="_blank" id="censys" class="link" title=" A search engine that provides access to a large amount of internet data and information, including host and network information.">censys.io</a></li>	
-		
-		<li><a href="https://www.shodan.io/search?query=" target="_blank" id="shodan-link" class="link" title="Search engine for Internet-connected devices.">Shodan</a></li>	
-		
-		<li><a href="https://www.robtex.com/ip-lookup/" target="_blank" id="robtex" class="link" title="IP address lookup tool for identifying potential malicious activities.">Robtex</a></li>
-		
-		<li><a href="https://searchdns.netcraft.com/?restriction=site+contains&host=" target="_blank" id="netcraft" class="link" title="Provides information about the web technology used by a domain.">Netcraft</a></li>
-		
-		<li><a href="https://whois.whoisxmlapi.com/lookup?q=" target="_blank" id="whoisxmlapi" class="link" title="Provides WHOIS data for a domain.">Who is XMLAPI</a></li>
-		
-		<li><a href="https://www.urlvoid.com/scan/" target="_blank" id="urlvoid" class="link" title="">urlvoid</a></li>
+  <form class="search-bar" onsubmit="updateLinks(event)">
+    <input id="search" placeholder="Enter IP, URL or hash..." required />
+    <button type="submit">ADD</button>
+  </form>
+
+  <div class="filter-bar">
+    <input id="filter" placeholder="Filter tools..." />
+  </div>
+
+  <div id="content"></div>
+
+  <script>
+    document.getElementById('theme-toggle').onclick = () => {
+      const body = document.body;
+      body.dataset.theme = body.dataset.theme === 'light' ? 'dark' : 'light';
+    };
+
+   const categories = {
+  "Search Tools": [
+    { name: 'Virus Total', url: 'https://www.virustotal.com/gui/search/', desc:'Analyse suspicious files, domains, IPs & URLs'},
+    { name: 'Web Check', url:'https://web-check.xyz/check/', desc:'All-in-one OSINT website analyzer'},
+    { name: 'IntelX', url:'https://intelx.io/?s=', desc:'Deep-dive OSINT search engine'},
+    { name: 'urlscan.io', url:'https://urlscan.io/search/#', desc:'Scan & analyze URLs'},
+    { name: 'Google Safe Browsing', url:'https://transparencyreport.google.com/safe-browsing/search?url=', desc:'Identify dangerous sites'},
+    { name: 'URLhaus', url:'https://urlhaus.abuse.ch/browse.php?search=', desc:'Malicious URL tracker'},
+    { name: 'Hybrid Analysis', url:'https://www.hybrid-analysis.com/search?query=', desc:'Malware analysis & threat intel'},
+    { name: 'Soc Radar IOC', url:'https://socradar.io/labs/ioc-radar/', desc:'Search IOCs'},
+    { name: 'Pulsedive', url:'https://pulsedive.com/ioc/', desc:'Threat intelligence'},
+    { name: 'AbuseIPDB', url:'https://www.abuseipdb.com/check/', desc:'Reported malicious IPs DB'},
+    { name: 'Censys', url:'https://search.censys.io/search?resource=hosts&sort=RELEVANCE&per_page=25&virtual_hosts=EXCLUDE&q=', desc:'Internet device data'},
+    { name:'Shodan', url:'https://www.shodan.io/search?query=', desc:'Internet-connected device search'},
+    { name:'Robtex', url:'https://www.robtex.com/ip-lookup/', desc:'IP lookup tool'},
+    { name:'Netcraft', url:'https://searchdns.netcraft.com/?restriction=site+contains&host=', desc:'Domain tech info'},
+    { name:'WhoisXML', url:'https://whois.whoisxmlapi.com/lookup?q=', desc:'Domain WHOIS data'},
+    { name:'urlvoid', url:'https://www.urlvoid.com/scan/', desc:''},
+    
+	{
+	  name: 'CentralOps',
+	  template: 'https://centralops.net/co/DomainDossier.aspx?addr={{query}}&_body=DomainDossier.aspx&dom_dns=true&dom_whois=true&net_whois=true',
+	  desc: 'DNS/WHOIS for domains and IPs'
+	},
 	
-		<li><a href="https://centralops.net/co/" target="_blank" id="centralops" class="link" title="Provides a variety of internet tools including DNS lookup, traceroute, and WHOIS data.">Centralops</a></li>
-		
-		<li><a href="https://www.fortiguard.com/search?q=" target="_blank" id="fortiguard" class="link" title="">Fortiguard</a></li>
+	{
+	  name: 'Fortiguard',
+	  template: 'https://www.fortiguard.com/search?q={{query}}&engine=7',
+	  desc: 'Fortinet threat intelligence'
+	},
+
+	{
+	  name: 'Meta Domain',
+	  template: 'https://metadefender.opswat.com/results/domain/{{query}}/overview',
+	  desc: 'Meta Defender cloud domain name scanner'
+	},
+
+    { name:'Sucuri', url:'https://sitecheck.sucuri.net/results/', desc:'Website malware checker'},
+    { name:'Threat Yeti', url:'https://threatyeti.com/search?q=', desc:'AI-driven domain/IP intelligence'},
+    { name:'MyWOT', url:'https://www.mywot.com/scorecard/', desc:''},
+    { name:'crt.sh', url:'https://crt.sh/?q=', desc:'Certificate transparency records'},
+    { name:'Security Trails', url:'https://securitytrails.com/', desc:'Domain & DNS data'},
+    { name:'Whoxy', url:'https://www.whoxy.com/', desc:''},
+    { name:'BuiltWith', url:'https://builtwith.com/', desc:''},
+    {
+	  name: 'SimilarWeb',
+	  template: 'https://www.similarweb.com/website/{{query}}/#overview',
+	  desc: 'Website traffic and ranking data'
+	}
+
+  ],
+  "IP INFO": [
+    { name:'IP Void', url:'https://www.ipvoid.com/scan/', desc:''},
+    { name:'IP to Hostname', url:'https://dnschecker.org/ip-to-hostname.php?query=', desc:''},
+    { name:'ARIN', url:'https://search.arin.net/rdap/?query=', desc:''},
+    { name:'DomainTools', url:'https://whois.domaintools.com/', desc:''},
+    { name:'IPinfo', url:'https://ipinfo.io/', desc:''},
+    { name:'GeoIP (HackerTarget)', url:'https://api.hackertarget.com/geoip/?q=', desc:''},
+    { name:'DNSLookup HT', url:'https://api.hackertarget.com/dnslookup/?q=', desc:''},
+    { name:'IP Quality Score', url:'https://www.ipqualityscore.com/free-ip-lookup-proxy-vpn-test/lookup/', desc:''},
+    { name:'MaxMind GeoIP2', url:'https://www.maxmind.com/en/geoip2-precision-demo?ip_address=', desc:''},
+    { name:'Spur', url:'https://spur.us/context/', desc:''},
+    
+	{
+	  name: 'MX DNS lookup',
+	  template: 'https://mxtoolbox.com/SuperTool.aspx?action=a%3a{{query}}&run=toolpage',
+	  desc: 'DNS A record lookup'
+	},
 	
-		<li><a href="https://metadefender.opswat.com/" target="_blank" id="metadefender" class="link" title="Provides an online scanner, they are currently using many sources to collect malicious addresses.">Meta Defender</a></li>
+    {
+	  name: 'MXToolbox',
+	  template: 'https://mxtoolbox.com/SuperTool.aspx?action=mx%3a{{query}}&run=toolpage',
+	  desc: 'MX Toolbox'
+	},
+   
+    { name:'Whois', url:'https://www.whois.com/whois/', desc:''},
+    { name:'WhatIsMyIP', url:'https://whatismyipaddress.com/ip/', desc:''},
+    { name:'DNS Checker', url:'https://dnschecker.org/#A/', desc:''},
+    
+	{
+	  name: 'DNSDumpster',
+	  template: 'https://dnsdumpster.com/?target={{query}}&user=free',
+	  desc: 'Passive DNS and domain mapping tool'
+	},
+
+	{
+	  name: 'Meta IP',
+	  template: 'https://metadefender.opswat.com/results/ip/{{query}}/overview',
+	  desc: 'Meta Defender IP scanner'
+	},
 	
-		<li><a href="https://sitecheck.sucuri.net/results/" target="_blank" id="sucuri" class="link" title="Website malware and security checker.">Sucuri</a></li>
+    { name:'FeodoTracker', url:'https://feodotracker.abuse.ch/browse.php?search=', desc:''},
+    { name:'Sans ISC', url:'https://isc.sans.edu/ipinfo.html?ip=', desc:''},
+    {
+	  name: 'BotScout',
+	  template: 'https://botscout.com/search.htm?sterm={{query}}&stype=q',
+	  desc: 'BotScout lookup'
+	},
+
+    { name:'IPHub', url:'https://iphub.info/?ip=', desc:''},
+    { name:'Criminal IP', url:'https://www.criminalip.io/en/asset/search?query=', desc:''},
+    { name:'Scamalytics', url:'https://scamalytics.com/ip/', desc:''},
+    { name:'Sicehice', url:'https://sicehice.com/search?ip=', desc:''},
+    { name:'Ping IPv4', url:'https://dnschecker.org/ping-ipv4.php?address=', desc:''}
+  ],
+  "THREAT INTELLIGENCE": [
+    { name:'Microsoft Defender TI', url:'https://ti.defender.microsoft.com/search?query=', desc:''},
+    { name:'IBM X-Force', url:'https://exchange.xforce.ibmcloud.com/', desc:''},
+    { name:'ThreatMiner', url:'https://www.threatminer.org/domain.php?q=', desc:''},
+    { name:'GreyNoise', url:'https://viz.greynoise.io/query/?gnql=', desc:''},
+    { name:'AlienVault OTX', url:'https://otx.alienvault.com/indicator/domain/', desc:''},
+    { name:'Onyphe', url:'https://www.onyphe.io/search?q=category:datascan+', desc:''},
+    { name:'SocRadar TH', url:'https://platform.socradar.com/app/threat-hunting?q=', desc:''},
+    { name:'Talos Intelligence', url:'https://talosintelligence.com/reputation_center/lookup?search=', desc:''},
+    { name:'Falcon Feeds', url:'https://dash.falconfeeds.io/threat-feed/posts', desc:''},
+    { name:'CrowdSec Intel', url:'https://app.crowdsec.net/cti/', desc:''},
+    {
+	  name: 'Maltiverse',
+	  template: 'https://maltiverse.com/search;query={{query}};page=1;sort=creation_time_desc',
+	  desc: 'Maltiverse threat intelligence search'
+	},
+
+    { name:'Mnemonic', url:'https://act-eu1.mnemonic.no/', desc:''},
+    { name:'LeakIX', url:'https://leakix.net/', desc:''},
+    { name:'Dehashed', url:'https://www.dehashed.com/', desc:''}
+  ],
+  "Hash Lookup": [
+    { name:'Valhalla', url:'https://valhalla.nextron-systems.com', desc:''},
+    { name:'VirusTotal (Hash)', url:'https://www.virustotal.com/gui/search/', desc:''},
+    { name:'Jotti', url:'https://virusscan.jotti.org/en-US/search/hash/', desc:''}
+  ],
+  "Email": [
+    { name:'Email Hunter', url:'https://hunter.io/search/', desc:''},
+    { name:'Email Finder', url:'https://hunter.io/find/', desc:'', skipSearch: true },
+    { name:'EmailRep', url:'https://emailrep.io/', desc:'', skipSearch: true },
+    { name:'Email Headers', url:'https://exchangedefender.com/docs/analyzing-smtp-mail-headers', desc:'', skipSearch: true},
+    {
+	  name: 'Epieos',
+	  template: 'https://epieos.com/?q={{query}}&t=email', 
+	  desc: 'Email lookup via Epieos'
+	},
+
+    { name:'HaveIBeenPwned', url:'https://haveibeenpwned.com/', desc:'', skipSearch: true},
+    { name:'PhoneBook.cz', url:'https://phonebook.cz/', desc:'', skipSearch: true},
+    { name:'Voilanorbert', url:'https://www.voilanorbert.com/', desc:'', skipSearch: true},
+    { name:'Email Checker', url:'https://email-checker.net/', desc:'', skipSearch: true}
+  ],
+  "ATTACK SURFACE": [
+    { name:'FullHunt', url:'https://fullhunt.io/', desc:'', skipSearch: true},
+    { name:'Netlas', url:'https://app.netlas.io/', desc:'', skipSearch: true}
+  ],
+  "VULNERABILITY DATABASE": [
+    { name:'Vulners', url:'https://vulners.com/', desc:'', skipSearch: true},
+    { name:'ExploitDB', url:'https://www.exploit-db.com/', desc:'', skipSearch: true}
+  ],
+  "OTHERS": [
+    { name:'Intezer', url:'https://analyze.intezer.com/', desc:'', skipSearch: true},
+    { name:'Browserling', url:'https://www.browserling.com/browse/win/7/chrome/109/', desc:'', skipSearch: true},
+    { name:'ANY.RUN', url:'https://app.any.run/', desc:'', skipSearch: true},
+    { name:'JoeSandbox', url:'https://www.joesandbox.com/', desc:'', skipSearch: true},
+    { name:'Malshare', url:'https://malshare.com/', desc:'', skipSearch: true},
+    { name:'CyberChef', url:'https://gchq.github.io/CyberChef/', desc:'', skipSearch: true},
+    { name:'OpenPhish', url:'https://openphish.com/', desc:'', skipSearch: true},
+    { name:'ThreatView', url:'https://threatview.io/', desc:'', skipSearch: true},
+    { name:'PhishTank', url:'https://www.phishtank.com/', desc:'', skipSearch: true},
+    { name:'icanhazip', url:'https://ipv4.icanhazip.com', desc:'', skipSearch: true},
+    { name:'Cloudflare Radar', url:'https://radar.cloudflare.com/scan', desc:'', skipSearch: true},
+    { name:'CurrentMillis', url:'https://currentmillis.com/', desc:'', skipSearch: true},
+    { name:'IPTools', url:'https://hackertarget.com/ip-tools/', desc:'', skipSearch: true},
+    { name:'ScreenshotMachine', url:'https://www.screenshotmachine.com/', desc:'', skipSearch: true},
+    { name:'SocRadArtTools', url:'https://socradar.io/labs/soc-tools/ip-reputation', desc:'', skipSearch: true},
+    { name:'SophosIntelix', url:'https://intelix.sophos.com/url', desc:'', skipSearch: true},
+    { name:'CheckPhish', url:'https://checkphish.ai/', desc:'', skipSearch: true},
+    { name:'RocketReach', url:'https://rocketreach.co/person', desc:'', skipSearch: true},
+    { name:'ZoomEye', url:'https://www.zoomeye.org/', desc:'', skipSearch: true},
+    { name:'OSINTFramework', url:'https://osintframework.com/', desc:'', skipSearch: true},
+    { name:'MyOSINT Tools', url:'https://www.myosint.training/pages/projects', desc:'', skipSearch: true},
+    { name:'ViewDNS', url:'https://viewdns.info/', desc:'', skipSearch: true},
+    { name:'Google Advanced', url:'https://www.google.com/advanced_search', desc:'', skipSearch: true},
+    { name:'DorkSearch', url:'https://dorksearch.com/', desc:'', skipSearch: true},
+    { name:'ScamSearch', url:'https://www.scamsearch.io/', desc:'', skipSearch: true},
+    { name:'OSINTCrypto', url:'https://github.com/aaarghhh/awesome_osint_criypto_web3_stuff', desc:'', skipSearch: true},
+    { name:'GrayHatWarfare', url:'https://buckets.grayhatwarfare.com/', desc:'', skipSearch: true},
+    { name:'WhatsMyName', url:'https://whatsmyname.app/', desc:'', skipSearch: true}
+  ],
+  "CODE SEARCH": [
+    {name: "Grep",url: "https://grep.app/",desc: "Codes Search", skipSearch: true},
+	{name: "Search Code",url: "https://searchcode.com/",desc: "Search Code",skipSearch: true
+	},
+	{name: "Publicwww",url: "https://publicwww.com/",desc: "Source Code Search Engine", skipSearch: true
+	}
+  ],
+  "NEWS": [
+	  { name: "The Dfir Report", url: "https://thedfirreport.com/", desc: "DFIR writeups and attack reports", skipSearch: true },
+	  { name: "Week In OSINT", url: "https://sector035.nl/articles/category:week-in-osint", desc: "Weekly OSINT roundup" , skipSearch: true},
+	  { name: "Bleeping Computer", url: "https://www.bleepingcomputer.com/", desc: "Security news and malware analysis" , skipSearch: true},
+	  { name: "The Hacker News", url: "https://thehackernews.com/", desc: "Cybersecurity news & threat updates" , skipSearch: true},
+	  { name: "Security Week", url: "https://www.securityweek.com/", desc: "Latest security & industry trends" , skipSearch: true},
+	  { name: "Threat Post", url: "https://threatpost.com/", desc: "Cybersecurity research and alerts" , skipSearch: true},
+	  { name: "Wired", url: "https://www.wired.com/category/security/", desc: "Security and privacy in tech" , skipSearch: true},
+	  { name: "Cyware", url: "https://cyware.com/cyber-security-news-articles", desc: "Threat news and analysis" , skipSearch: true},
+	  { name: "Helpnet Security", url: "https://www.helpnetsecurity.com/", desc: "Security news and updates" , skipSearch: true},
+	  { name: "Darkreading", url: "https://www.darkreading.com/threat-intelligence", desc: "Threat intelligence and defense" , skipSearch: true},
+	  { name: "Infosecurity Magazine", url: "https://www.infosecurity-magazine.com/threat-intelligence/", desc: "Security news magazine" , skipSearch: true},
+	  { name: "Trendmicro", url: "https://www.trendmicro.com/vinfo/us/security/news/vulnerabilities-and-exploits", desc: "Exploit and threat updates" , skipSearch: true}
+	],
+
+  "PODCASTS": [
+	  { name: "Breadcrumbs", url: "https://open.spotify.com/show/1PHveMFjdgyxJJAZJWWF8G", desc: "TraceLabs podcast on OSINT" , skipSearch: true},
+	  { name: "Layer 8 Podcast", url: "https://podcasts.apple.com/us/podcast/layer-8-podcast/id1495404846", desc: "Human side of social engineering" , skipSearch: true},
+	  { name: "OSINT Show", url: "https://open.spotify.com/show/1vqRjYaq1pPcCdCTtMmFg9", desc: "OSINT interviews and discussion" , skipSearch: true},
+	  { name: "The OSINT Bunker", url: "https://rss.com/podcasts/theosintbunker/", desc: "Security & OSINT roundtable" , skipSearch: true},
+	  { name: "Intel Techniques", url: "https://inteltechniques.com/podcast.html", desc: "Privacy and OSINT talk" , skipSearch: true},
+	  { name: "Janes Podcast", url: "https://podcast.janes.com/public/68/The-World-of-Intelligence-50487d09", desc: "Military and intelligence" , skipSearch: true},
+	  { name: "Malwarebytes", url: "https://www.malwarebytes.com/blog/category/podcast", desc: "Malwarebytes security podcast", skipSearch: true }
+	],
+	"USEFUL THINGS": [
+	  {
+		name: "Lolbas",
+		url: "https://lolbas-project.github.io/",
+		desc: "Living Off the Land Binaries and Scripts" , skipSearch: true
+	  },
+	  {
+		name: "Echotrail",
+		url: "https://www.echotrail.io/insights",
+		desc: "Process insights: description, frequency, command usage" , skipSearch: true
+	  },
+	  {
+		name: "Ruler Project",
+		url: "https://ruler-project.github.io/ruler-project/RULER/remote/",
+		desc: "Project RULER: Remote execution references" , skipSearch: true
+	  }
+	]
+
+
+};
 	
-		<li><a href="https://threatyeti.com/search?q=" target="_blank" id="threatyeti" class="link" title="Domain and IP intelligence feeds for cyber protection and investigational platforms based on continuously trained AI models.">Threat Yeti</a></li>
+	function replaceSpecialCharacters(str) {
+		return str.replaceAll("/", "%252F").replaceAll(":", "%253A");
+	}
+
+    function renderCategory(title, items) {
+      const section = document.createElement('div'); section.className = 'section';
+      section.innerHTML = `<h2>${title}</h2><div class="grid"></div>`;
+      const grid = section.querySelector('.grid');
+      items.forEach(tool => {
+        const card = document.createElement('div'); card.className = 'card';
+        const link = document.createElement('a'); link.textContent = tool.name;
+        link.href = tool.url; link.target = '_blank';
+        const tip = document.createElement('div'); tip.className = 'tooltip'; tip.textContent = tool.desc;
+        card.append(link, tip);
+        grid.append(card);
+      });
+      return section;
+    }
+
+	// ✅ Auto-fill and trigger ADD from URL ?ip=... or ?q=...
+	window.addEventListener('DOMContentLoaded', () => {
+	  const params = new URLSearchParams(window.location.search);
+	  const value = params.get('ip') || params.get('q'); // support ?ip= or ?q=
+
+	  if (value) {
+		const input = document.getElementById('search');
+		input.value = value;
+
+		// Simulate submit
+		const fakeEvent = new Event('submit');
+		const form = document.querySelector('.search-bar');
+		form.dispatchEvent(fakeEvent);
+	  }
+	});
+
+
+    function renderAll(filter = '') {
+      const container = document.getElementById('content'); container.innerHTML = '';
+      Object.entries(categories).forEach(([title, items]) => {
+        const filtered = items.filter(t => t.name.toLowerCase().includes(filter) || t.desc.toLowerCase().includes(filter));
+        if (filtered.length) container.append(renderCategory(title, filtered));
+      });
+    }
+
+    document.getElementById('filter').addEventListener('input', e => {
+      renderAll(e.target.value.trim().toLowerCase());
+    });
 	
-	    <li><a href="https://www.mywot.com/scorecard/" target="_blank" id="mywot" class="link" title="Myvot.">Myvot</a></li>
-		
-		<li><a href="https://crt.sh/?q=" target="_blank" id="crt" class="link" title="Certificate History">Certificate History</a></li>
+	document.getElementById('filter').addEventListener('dblclick', () => {
+	  const filterInput = document.getElementById('filter');
+	  filterInput.value = '';
+	  renderAll(); // Clear filter and re-render all tools
+	});
+
+
+function replaceSpecialCharacters(str) {
+  // Single-level encoding for VirusTotal (avoid %25 double encoding)
+  return str.replaceAll("/", "%2F").replaceAll(":", "%3A");
+}
+
+function sanitizeInput(str) {
+  return str.replace(/^https?:\/\//, '').replace(/\/$/, '');
+}
+
+function updateLinks(e) {
+  e.preventDefault();
+
+  const searchInput = document.getElementById('search');
+  const raw = searchInput.value.trim();
+  const cleaned = sanitizeInput(raw);
+  const encoded = encodeURIComponent(cleaned);
+  const fullEncoded = encodeURIComponent(raw);
+  const base64 = btoa(cleaned);
+  const addButton = e.submitter || document.querySelector('.search-bar button');
+
+  Object.values(categories).flat().forEach(t => {
+	if (t.skipSearch) return; // 🔒 Skip updating this tool, these are other things
 	
-		<li><a href="https://securitytrails.com/" target="_blank" id="securitytrails" class="link" title="Find Subdomains">Security Trails</a></li>
-			
-		<li><a href="https://www.whoxy.com/" target="_blank" id="whoxy" class="link" title="Domain Search Engine">Whoxy</a></li>
-		
-		<li><a href="https://builtwith.com/" target="_blank" id="builtwith" class="link" title="Find out what websites are Built With">Built With</a></li>
-		
-		<li><a href="https://www.similarweb.com/website/" target="_blank" id="similarweb" class="link" title="similarweb">Similar Web</a></li>
-		
-	
-		
-	</ul>
+    if (!t.originalUrl) {
+      t.originalUrl = t.template || t.url;
+    }
 
-	<h2>IP INFO</h2>
-	<ul>
-		
-		<li><a href="https://www.ipvoid.com/" target="_blank" id="ipvoid" class="link" title="ipvoid">IP Void</a></li>	
-		<li><a href="https://dnschecker.org/ip-to-hostname.php" target="_blank" id="ip-to-hostname" class="link" title="IP to Hostname">IP to Hostname</a></li>			
-		<li><a href="https://search.arin.net/" target="_blank" id="arin" class="link" title="Arin">Arin</a></li>			
-		<li><a href="https://whois.domaintools.com/" target="_blank" id="domaintools-link" class="link" title=" Provides information about a domain's ownership, registration, and DNS records.">Domain Tools</a></li>
-		<li><a href="https://ipinfo.io/" target="_blank" id="ipinfo" class="link" title="IP address geolocation and details lookup tool.">IP Info</a></li>
-		<li><a href="https://api.hackertarget.com/geoip/?q=" target="_blank" id="apihackertarget" class="link" title="Show location of an IP">Hackertarget Location</a></li>
-		<li><a href="https://api.hackertarget.com/dnslookup/?q=" target="_blank" id="hackertargetdnslookup" class="link" title="Hackertarget DNS Lookup">DNS Lookup</a></li>
-		<li><a href="https://www.ipqualityscore.com/free-ip-lookup-proxy-vpn-test/lookup/" target="_blank" id="ipqualityscore" class="link" title=" Identifies the proxy and VPN usage of an IP address.">IP Quality Score</a></li>
-		<li><a href="https://www.maxmind.com/en/geoip2-precision-demo?ip_address=" target="_blank" id="maxmind" class="link" title="Geolocation service for IP addresses.">Maxmind GeoIP2</a></li>
-		<li><a href="https://spur.us/context/" target="_blank" id="spur" class="link" title="Spur provides tools and data to detect VPNs, Residential Proxies, and Bots. ">Spur</a></li>
-		<li><a href="https://mxtoolbox.com/DNSLookup.aspx" target="_blank" id="mxtoolbox" class="link" title="DNS Lookup">MX DNS Lookup</a></li>
-		<li><a href="https://mxtoolbox.com/" target="_blank" id="mxtoolboxblacklist" class="link" title="MX Blacklist">MX Blacklist</a></li>
-		<li><a href="https://www.whois.com/whois/" target="_blank" id="whois" class="link" title="DNS Lookup">Whois</a></li>
-		<li><a href="https://whatismyipaddress.com/ip/" target="_blank" id="whatismyipaddress" class="link" title="whatismyipaddress">What is my ip</a></li>
-		<li><a href="https://dnschecker.org/#A/" target="_blank" id="dnschecker" class="link" title="Recently changed your DNS records, switched web host, or started a new website">Dns Checker</a></li>
-		<li><a href="https://dnsdumpster.com/?target=" target="_blank" id="dnsdumpster" class="link" title="dnsdumpster">Dns Dumpster</a></li>
-		<li><a href="https://www.blocklist.de/en/search.html" target="_blank" id="blocklist" class="link" title="blocklist">Blocklist</a></li>
-		<li><a href="https://feodotracker.abuse.ch/browse/" target="_blank" id="feodotracker" class="link" title="Here you can browse the list of botnet Command&Control servers (C&Cs) tracked by Feodo Tracker, associated with Dridex, TrickBot, QakBot (aka QuakBot/Qbot), BazarLoader (aka BazarBackdoor) and Emotet (aka Heodo).">Feodotracker</a></li>
-		<li><a href="https://isc.sans.edu/ipinfo.html" target="_blank" id="sans" class="link" title="Internet Storm Center">Sans ISC</a></li>
-		<li><a href="https://botscout.com" target="_blank" id="botscout" class="link" title="BotScout helps prevent automated web scripts, known as bots, from registering on forums, polluting databases, spreading spam, and abusing forms on web sites.">BotScout</a></li>
-		<li><a href="https://iphub.info" target="_blank" id="iphub" class="link" title="IPHub is an IP lookup website featuring Proxy/VPN detection.">IPHub</a></li>
-		<li><a href="https://www.criminalip.io/en/asset/search?query=" target="_blank" id="criminalip" class="link" title="criminalip.">Criminal IP</a></li>
-		<li><a href="https://scamalytics.com/ip/" target="_blank" id="scamalytics" class="link" title="Scamalytics">Scamalytics</a></li>
-		<li><a href="https://dnschecker.org/ping-ipv4.php" target="_blank" id="pingip4" class="link" title="Ping IP">Ping IP</a></li>		
+    let finalQuery = encoded;
+
+    // ✅ Tools needing full URL-encoded raw input
+    if (t.originalUrl.includes("web-check.xyz")) {
+      finalQuery = fullEncoded;
+    }
+
+    // ✅ MetaDefender: use base64 encoding
+    if (t.originalUrl.includes("metadefender.opswat.com")) {
+      finalQuery = base64;
+    }
+
+    if (t.template) {
+      t.url = t.originalUrl.replaceAll('{{query}}', finalQuery);
+    } else {
+      t.url = t.originalUrl + finalQuery;
+    }
+  });
+
+  renderAll(document.getElementById('filter').value.trim().toLowerCase());
+
+  addButton.style.backgroundColor = '#22c55e';
+  setTimeout(() => {
+    addButton.style.backgroundColor = '';
+  }, 500);
+}
 
 
-	</ul>
 
-	<h2>THREAT INTELLIGENCE</h2>
-	<ul> 
-		<li><a href="https://ti.defender.microsoft.com/search?query=" target="_blank" id="defender" class="link" title="Threat intelligence platform provided by Microsoft.">Microsoft Defender TI</a></li>
-		<li><a href="https://exchange.xforce.ibmcloud.com/" target="_blank" id="xforce" class="link" title="Research, Collaborate and Act on threat intelligence">IBM X-Force</a></li>
-		<li><a href="https://www.threatminer.org/domain.php?q=" target="_blank" id="threatminer" class="link" title="Collects information about a domain's infrastructure, related domains, and IP addresses.">Threat Miner</a></li>
-		<li><a href="https://viz.greynoise.io/query/?gnql=" target="_blank" id="greynoise" class="link" title="Platform for cyber threat intelligence and incident response.">Grey Noise</a></li>	
-		<li><a href="https://otx.alienvault.com/indicator/domain/" target="_blank" id="alienvault" class="link" title="Threat Intelligence Community">Alienvault</a></li>
-		<li><a href="https://www.onyphe.io/search?q=category:datascan+" target="_blank" id="onyphe" class="link" title="ONYPHE is a Cyber Defense Search Engine dedicated to Attack Surface Discovery & Attack Surface Management. ">Onyphe</a></li>
-		<li><a href="https://platform.socradar.com/app/threat-hunting?q=" target="_blank" id="socradarTH" class="link" title="socradarTH">Soc Radar TH</a></li>
-		<li><a href="https://talosintelligence.com/reputation_center/lookup?search=" target="_blank" id="talosintelligence" class="link" title="Search by IP, domain, or network owner for real-time threat data.">Talos Intelligence</a></li>
-		<li><a href="https://dash.falconfeeds.io/threat-feed/posts" target="_blank" id="falconfeeds" class="link" title="Falcon Threat Feeds">Falcon Threat Feeds</a></li>
-		<li><a href="https://app.crowdsec.net/cti/" target="_blank" id="crowdsec-intel" class="link" title="Crowdsec IP Intel">Crowdsec IP Intel</a></li>
-		<li><a href="https://maltiverse.com/search" target="_blank" id="maltiverse" class="link" title="maltiverse">Maltiverse</a></li>
-		<li><a href="https://act-eu1.mnemonic.no/" target="_blank" id="mnemonic" class="link" title="mnemonic">Mnemonic</a></li>
-		<li><a href="https://leakix.net/" target="_blank" id="leakix" class="link" title="This project goes around the Internet and finds services to index them.">Leakix</a></li>
-		<li><a href="https://www.dehashed.com/" target="_blank" id="dehashed" class="link" title="Dehashed - not free">Dehashed</a></li>
-		
-	
-		
-	</ul>
-
-	<h2>Hash Lookup</h2>
-	<ul> 
-	
-	
-		<li><a href="https://valhalla.nextron-systems.com" target="_blank" id="valhalla" class="link" title="Analyse suspicious files, domains, IPs and URLs.">Valhalla</a></li>
-		
-		<li><a href="https://www.virustotal.com/gui/search/" target="_blank" id="virustotal-link" class="link" title="Analyse suspicious files, domains, IPs and URLs.">Virus Total</a></li>
-		
-		<li><a href="https://virusscan.jotti.org/en-US/search/hash/" target="_blank" id="jotti" class="link" title="Jotti">Jotti</a></li>
-	</ul>
-	
-	<h2>Email</h2>
-	<ul> 
-		<li><a href="https://hunter.io/search/" target="_blank" id="hunter-email" class="link" title="Verify emails">Email Hunter</a></li>
-
-		<li><a href="https://hunter.io/find/" target="_blank" id="hunter-email-finder" class="link" title="Email Finder">Email Finder</a></li>
-		
-		<li><a href="https://emailrep.io/" target="_blank" id="emailrep" class="link" title="Email Reputation">Email Reputation</a></li>
-		
-		<li><a href="https://exchangedefender.com/docs/analyzing-smtp-mail-headers" target="_blank" id="exchangedefender" class="link" title="Analyzing smtp mail headers">Email Headers</a></li>
-
-		<li><a href="https://epieos.com/" target="_blank" id="epieos" class="link" title="This tool allows you to find if an email address was leaked in data breaches.">Epieos</a></li>
-		
-		<li><a href="https://haveibeenpwned.com/" target="_blank" id="haveibeenpwned" class="link" title="Have I Been Pwned">Have I Been Pwned</a></li>
-			
-		<li><a href="https://phonebook.cz/" target="_blank" id="phonebook" class="link" title="phonebook">Phone Book</a></li>
-		
-		<li><a href="https://www.voilanorbert.com/" target="_blank" id="voilanorbert" class="link" title="voilanorbert">Voilanorbert</a></li>
-		
-		<li><a href="https://email-checker.net/" target="_blank" id="email-checker" class="link" title="verifying an email address">Email Checker</a></li>
-		
-		
-	</ul>
-
-	<h2>ATTACK SURFACE</h2>
-	<ul> 
-		<li><a href="https://fullhunt.io/" target="_blank" id="fullhunt" class="link" title="If you don't know all your internet-facing assets, which ones are vulnerable, FullHunt is here for you.">Full Hunt</a></li>
-		<li><a href="https://app.netlas.io/" target="_blank" id="netlas" class="link" title="Discover, Research and Monitor any Assets Available Online">Netlas</a></li>
-	</ul>
-
-	<h2>Vulnerability Database</h2>
-	<ul>
-		<li><a href="https://vulners.com/" target="_blank" id="vulners" class="link" title="Vulnerability Database and Search Engine">Vulners</a></li>
-		<li><a href="https://www.exploit-db.com/" target="_blank" id="exploitdb" class="link" title="">Exploit DB</a></li>
-	</ul>
-	
-	<h2>Others</h2>
-	<ul>
-		<li><a href="https://analyze.intezer.com/" target="_blank" id="intezer" class="link" title="Analyzes executable files and URLs to detect malware and malicious activity.">Intezer</a></li>
-		<li><a href="https://www.browserling.com/browse/win/7/chrome/109/" target="_blank" id="browserling" class="link" title="Browserling is a web-based cross-browser testing tool that allows users to test their websites on different browsers and operating systems.">Browserling</a></li>
-		<li><a href="https://app.any.run/" target="_blank" id="anyrun" class="link" title="Any.run is an interactive malware analysis platform designed to detect and eliminate threats. It allows users to upload and analyze suspicious files and URLs in a safe environment to identify and remove malware.">ANY.RUN</a></li>
-		<li><a href="https://www.joesandbox.com/" target="_blank" id="joesandbox" class="link" title="Analyzes executable files and URLs to detect malware and malicious activity.">Joesandbox</a></li>
-		<li><a href="https://malshare.com/" target="_blank" id="malshare" class="link" title="Malshare.com is a free online community where users can upload and share malware samples with other security researchers and analysts.">Malshare</a></li>
-		<li><a href="https://gchq.github.io/CyberChef/" target="_blank" id="CyberChef" class="link" title="CyberChef">CyberChef</a></li>
-		<li><a href="https://openphish.com/" target="_blank" id="openphish" class="link" title="Timely. Accurate. Relevant Phishing Intelligence.">Openphish</a></li>
-		<li><a href="https://threatview.io/" target="_blank" id="threatview" class="link" title="ThreatView.io is a cybersecurity platform that provides real-time threat intelligence and risk assessment for businesses.">Threatview</a></li>
-		<li><a href="https://www.phishtank.com/" target="_blank" id="phishtank" class="link" title="ThreatView.io is a cybersecurity platform that provides real-time threat intelligence and risk assessment for businesses.">Phishtank</a></li>
-		<li><a href="https://ipv4.icanhazip.com" target="_blank" id="icanhazip" class="link" title="What is your IP?">icanhazip</a></li>
-		<li><a href="https://radar.cloudflare.com/scan" target="_blank" id="cloudflare" class="link" title="cloudflare">Cloud Flare</a></li>
-		<li><a href="https://currentmillis.com/" target="_blank" id="currentmillis" class="link" title="currentmillis">Current Millis</a></li>
-		<li><a href="https://hackertarget.com/ip-tools/" target="_blank" id="iptools" class="link" title="ip-tools">Ip Tools</a></li>
-		<li><a href="https://www.screenshotmachine.com/" target="_blank" id="screenshotmachine" class="link" title="screenshot">Screens Hotmachine</a></li>
-		<li><a href="https://socradar.io/labs/soc-tools/ip-reputation" target="_blank" id="socradartools" class="link" title="Soc Radar Tools">Soc Radar Tools</a></li>
-		<li><a href="https://intelix.sophos.com/url" target="_blank" id="sophos-intelix" class="link" title="sophos-intelix">Sophos Intelix</a></li>
-		<li><a href="https://checkphish.ai/" target="_blank" id="checkphish" class="link" title="Check Phish">Check Phish</a></li>
-		<li><a href="https://rocketreach.co/person" target="_blank" id="rocketreach" class="link" title="Find someone">Rocket Reach</a></li>
-		<li><a href="https://www.zoomeye.org/" target="_blank" id="zoomeye" class="link" title="zoomeye">Zoomeye</a></li>
-		<li><a href="https://osintframework.com/" target="_blank" id="OSINTFramework" class="link" title="OSINT Framework">OSINT Framework</a></li>
-		<li><a href="https://www.myosint.training/pages/projects" target="_blank" id="Myosint-Tools" class="link" title="Myosint Tools">Myosint Tools</a></li>
-		<li><a href="https://viewdns.info/" target="_blank" id="viewdns" class="link" title="viewdns info">View Dns</a></li>
-		<li><a href="https://www.google.com/advanced_search" target="_blank" id="advanced_search" class="link" title="Google Advanced Search">Google Advanced Search</a></li>
-		<li><a href="https://dorksearch.com/" target="_blank" id="dorksearch" class="link" title="For educational purposes only.">Dork Search</a></li>
-		<li><a href="https://www.scamsearch.io/" target="_blank" id="scamsearch" class="link" title="ScamSearch Database">Scam Search</a></li>
-		<li><a href="https://github.com/aaarghhh/awesome_osint_criypto_web3_stuff" target="_blank" id="osint_criypto" class="link" title="A list of useful Crypto resources for OSINT investigations">Osint Criypto</a></li>
-		<li><a href="https://buckets.grayhatwarfare.com/" target="_blank" id="grayhatwarfare" class="link" title="Search public S3 buckets">Gray Hat Warfare</a></li>
-	    <li><a href="https://lolbas-project.github.io/" target="_blank" id="lolbas" class="link" title="lolbas">Lolbas</a></li>	<li><a href="https://whatsmyname.app/" target="_blank" id="whatsmyname" class="link" title="whatsmyname">Whats my Name</a></li>	
-		
-	</ul>
-
-	<h2>CODE SEARCH</h2>
-	<ul>
-		<li><a href="https://grep.app/" target="_blank" id="grep" class="link" title="Codes Search">Grep</a></li>
-		<li><a href="https://searchcode.com/" target="_blank" id="searchcode" class="link" title="Search Code">Search Code</a></li>
-		<li><a href="https://publicwww.com/" target="_blank" id="publicwww" class="link" title="Source Code Search Engine">Publicwww</a></li>
-		
-	</ul>
-
-	<h2>NEWS</h2>
-	<ul>
-	
-	    <li><a href="https://thedfirreport.com/" target="_blank" id="thedfirreport class="link">The Dfir Report</a></li>	
-		<li><a href="https://sector035.nl/articles/category:week-in-osint" target="_blank" id="week-in-osint" class="link">Week In Osint</a></li>
-		<li><a href="https://www.bleepingcomputer.com/" target="_blank" id="bleepingcomputer" class="link">Bleeping Computer</a></li>
-		<li><a href="https://thehackernews.com/" target="_blank" id="thehackernews" class="link">The Hacker News </a></li>
-		<li><a href="https://www.securityweek.com/" target="_blank" id="securityweek" class="link">Security Week </a></li>
-		<li><a href="https://threatpost.com/" target="_blank" id="threatpost" class="link">Threat Post</a></li>
-		<li><a href="https://www.wired.com/category/security/" target="_blank" id="wired" class="link">Wired</a></li>
-		<li><a href="https://cyware.com/cyber-security-news-articles" target="_blank" id="cyware" class="link">Cyware</a></li>
-		<li><a href="https://www.helpnetsecurity.com/" target="_blank" id="helpnetsecurity" class="link">Helpnet Security</a></li>
-		<li><a href="https://www.darkreading.com/threat-intelligence" target="_blank" id="darkreading" class="link">Darkreading</a></li>
-		<li><a href="https://www.infosecurity-magazine.com/threat-intelligence/" target="_blank" id="infosecurity" class="link">Infosecurity Magazine</a></li>
-		<li><a href="https://www.trendmicro.com/vinfo/us/security/news/vulnerabilities-and-exploits" target="_blank" id="trendmicro" class="link">Trendmicro</a></li>
-		
-		
-		
-		
+	renderAll();
+  </script>
+	 
+<footer style="margin-top: 3rem; text-align: center; font-size: 0.95rem; padding: 1rem 0; border-top: 1px solid var(--muted); color: var(--muted); transition: all 0.3s ease;">
+  🛡️ Made for defenders, by 
+  <a href="https://www.linkedin.com/in/ekremozdemir19/" 
+     target="_blank" 
+     title="https://www.linkedin.com/in/ekremozdemir19/"
+     style="color: var(--primary); font-weight: 600; text-decoration: none; transition: color 0.3s ease;">
+    Ekrem O.
+  </a>
+</footer>
 
 
-	</ul>
-	<h2>PODCASTS</h2>
-	<ul>		
-		<li><a href="https://open.spotify.com/show/1PHveMFjdgyxJJAZJWWF8G" target="_blank" id="TraceLabs" class="link">Breadcrumbs</a></li>
-		<li><a href="https://podcasts.apple.com/us/podcast/layer-8-podcast/id1495404846" target="_blank" id="Layer8Podcast" class="link">Layer 8 Podcast</a></li>
-		<li><a href="https://open.spotify.com/show/1vqRjYaq1pPcCdCTtMmFg9" target="_blank" id="OSINT-Show" class="link">OSINT Show</a></li>
-		<li><a href="https://rss.com/podcasts/theosintbunker/" target="_blank" id="theosintbunker" class="link">The Osint Bunker</a></li>
-		<li><a href="https://inteltechniques.com/podcast.html" target="_blank" id="inteltechniques" class="link">Intel Techniques</a></li>
-		<li><a href="https://podcast.janes.com/public/68/The-World-of-Intelligence-50487d09" target="_blank" id="Janes-Podcast" class="link">Janes Podcast</a></li>
-		<li><a href="https://www.malwarebytes.com/blog/category/podcast" target="_blank" id="malwarebytes" class="link">Malwarebytes</a></li>	
-	</ul>
-	
-	<h2>OSINT TRAINING</h2>
-	<ul>
-		<li><a href="https://www.youtube.com/watch?v=qwA6MmbeGNo&ab_channel=TheCyberMentor" target="_blank" id="OSINT-in-5-Hours" class="link">OSINT in 5 Hours</a></li>
-		<li><a href="https://academy.tcm-sec.com/p/osint-fundamentals" target="_blank" id="TCM-OSINT-Fundamentals" class="link">TCM OSINT Fundamentals</a></li>
-		<li><a href="https://start.me/p/DPYPMz/the-ultimate-osint-collection" target="_blank" id="The-Ultimate-OSINT-Collection" class="link">The Ultimate OSINT Collection</a></li>
-		<li><a href="https://myosint.training" target="_blank" id="myosint-training" class="link">myosint.training</a></li>
-		<li><a href="https://www.osint.games/" target="_blank" id="osint-games" class="link">Osint Games</a></li>
-		<li><a href="https://courses.thecyberinst.org/courses/lasvegas-challenge" target="_blank" id="osint-challenge" class="link">Osint Challange</a></li>
-	    <li><a href="https://www.youtube.com/watch?v=SMGEhFXURzY&ab_channel=SANSCyberDefense" target="_blank" id="OSINT-Automation" class="link">OSINT Automation</a></li>
-		<li><a href="https://github.com/OffcierCia/non-typical-OSINT-guide" target="_blank" id="OSINT-guide" class="link">OSINT Guide</a></li>
-		<li><a href="https://www.osintdojo.com/resources/" target="_blank" id="osintdojo" class="link">OSINT Dojo</a></li>
-		<li><a href="https://www.youtube.com/playlist?list=PLrFPX1Vfqk3ehZKSFeb9pVIHqxqrNW8Sy" target="_blank" id="image-reverse-search" class="link">Image Reverse Search</a></li>
-		<li><a href="https://sourcing.games/" target="_blank" id="sourcing.games" class="link">Sourcing Games</a></li>
-		
-		
-	</ul>
 
 
-	
-	<script>			
-			/////////////////////////////////////////////////////////////
-			// Change the color of 'Add' button
-			const theInput = document.getElementById("search");
-			const addButton = document.getElementById("add-button");
-			var i=0;
-			addButton.addEventListener("click", function()
-			{			
-				if (theInput.value !== "") 
-				{
-					if (i%2 == 0) 
-					{
-						addButton.style.backgroundColor = 'blue';
-					}					
-					else 
-					{
-						addButton.style.backgroundColor = 'green';
-					}
-					i++;
-				}					
-			});
-
-			theInput.oninput = function() {
-				if (theInput.value.trim() === "") {
-					addButton.style.backgroundColor = "orange";
-				}
-			};
-			/////////////////////////////////////////////////////////////
-
-			//function removeHttp(theurl) {
-			// Use regular expression to match any occurrences of "https://" or "http://"
-			//const pattern = /https?:\/\//g;
-			//return theurl.replace(pattern, "");
-			//}
-
-			/////////////////////////////////////////////////////////////
-
-			function replaceSpecialCharacters(str) { // this function is for virustotal...
-				return str.replaceAll("/", "%252F").replaceAll(":", "%253A");
-			}
-
-
-		function updateLinks(event) {
-			event.preventDefault();
-
-			//var searchQueryHttps = document.getElementById("search").value; // with https
-			//var searchQuery = removeHttp(document.getElementById("search").value); // remove https
-			//document.getElementById("search").value = searchQuery; // rewrite the clean text
-
-			searchQuery = document.getElementById("search").value;
-
-			document.getElementById("virustotal-link").href = "https://www.virustotal.com/gui/search/" + replaceSpecialCharacters(searchQuery);
-			document.getElementById("intelx").href = "https://intelx.io/?s=" + searchQuery;
-			document.getElementById("urlscan").href = "https://urlscan.io/search/#" + searchQuery;
-			document.getElementById("transparencyreport").href = "https://transparencyreport.google.com/safe-browsing/search?url=" + searchQuery;
-			document.getElementById("urlhaus").href = "https://urlhaus.abuse.ch/browse.php?search=" + searchQuery;	
-			document.getElementById("hybrid-analysis").href = "https://www.hybrid-analysis.com/search?query=" + searchQuery;	
-			document.getElementById("abuseipdb").href = "https://www.abuseipdb.com/check/" + searchQuery;	
-			document.getElementById("censys").href = "https://search.censys.io/search?resource=hosts&sort=RELEVANCE&per_page=25&virtual_hosts=EXCLUDE&q=" + searchQuery;	
-			document.getElementById("greynoise").href = "https://viz.greynoise.io/query/?gnql=" + searchQuery;	
-			document.getElementById("shodan-link").href = "https://www.shodan.io/search?query=" + searchQuery;		
-			document.getElementById("domaintools-link").href = "https://whois.domaintools.com/" + searchQuery;
-			document.getElementById("maxmind").href = "https://www.maxmind.com/en/geoip2-precision-demo?ip_address=" + searchQuery;
-			document.getElementById("ipinfo").href = "https://ipinfo.io/" + searchQuery;
-   			document.getElementById("ipqualityscore").href = "https://www.ipqualityscore.com/free-ip-lookup-proxy-vpn-test/lookup/" + searchQuery;
-			document.getElementById("robtex").href = "https://www.robtex.com/ip-lookup/" + searchQuery;
-			document.getElementById("netcraft").href = "https://searchdns.netcraft.com/?restriction=site+contains&host=" + searchQuery;
-			document.getElementById("whoisxmlapi").href = "https://whois.whoisxmlapi.com/lookup?q=" + searchQuery;
-			document.getElementById("defender").href = "https://ti.defender.microsoft.com/search?query=" + searchQuery;
-			document.getElementById("threatminer").href = "https://www.threatminer.org/host.php?q=" + searchQuery;
-			document.getElementById("talosintelligence").href = "https://talosintelligence.com/reputation_center/lookup?search=" + searchQuery;
-			document.getElementById("spur").href = "https://spur.us/context/" + searchQuery;
-			document.getElementById("urlvoid").href = "https://www.urlvoid.com/scan/" + searchQuery;
-			document.getElementById("centralops").href = "https://centralops.net/co/DomainDossier.aspx?addr=" + searchQuery + "&_body=DomainDossier.aspx&dom_dns=true&dom_whois=true&net_whois=true";
-			document.getElementById("mxtoolbox").href = "https://mxtoolbox.com/SuperTool.aspx?action=mx%3a" + searchQuery + "&run=toolpage";
-			document.getElementById("whois").href = "https://www.whois.com/whois/" + searchQuery;
-			document.getElementById("whatismyipaddress").href = "https://whatismyipaddress.com/ip/" + searchQuery;
-			document.getElementById("fortiguard").href = "https://www.fortiguard.com/search?q=" + searchQuery + "&engine=7";
-			document.getElementById("alienvault").href = "https://otx.alienvault.com/indicator/domain/" + searchQuery;
-			document.getElementById("dnschecker").href = "https://dnschecker.org/#A/" + searchQuery;
-			document.getElementById("onyphe").href = "https://www.onyphe.io/search?q=category:datascan+" + searchQuery;
-			document.getElementById("dnsdumpster").href = "https://dnsdumpster.com/?target=" + searchQuery + "&user=free";
-			document.getElementById("browserling").href = "https://www.browserling.com/browse/win/7/chrome/109/" + searchQuery;
-			document.getElementById("metadefender").href = "https://metadefender.opswat.com/results/domain/" + btoa(searchQuery) + "/overview";
-			document.getElementById("blocklist").href = "https://www.blocklist.de/en/search.html?ip=" + searchQuery + "&cronjob=refreshcache";
-			document.getElementById("feodotracker").href = "https://feodotracker.abuse.ch/browse.php?search=" + searchQuery;
-			document.getElementById("sans").href = "https://isc.sans.edu/ipinfo.html?ip=" + searchQuery;
-			document.getElementById("xforce").href = "https://exchange.xforce.ibmcloud.com/ip/" + searchQuery;
-			document.getElementById("botscout").href = "https://botscout.com/search.htm?sterm=" + searchQuery + "&stype=q";
-			document.getElementById("iphub").href = "https://iphub.info/?ip=" + searchQuery;	
-			document.getElementById("criminalip").href = "https://www.criminalip.io/en/asset/search?query=" + searchQuery;
-			document.getElementById("sucuri").href = "https://sitecheck.sucuri.net/results/" + searchQuery;
-			document.getElementById("apihackertarget").href = "https://api.hackertarget.com/geoip/?q=" + searchQuery;
-			document.getElementById("hackertargetdnslookup").href = "https://api.hackertarget.com/dnslookup/?q=" + searchQuery;
-			document.getElementById("mxtoolboxblacklist").href = "https://mxtoolbox.com/SuperTool.aspx?action=blacklist%3a" + searchQuery + "&run=toolpage";
-			document.getElementById("jotti").href = "https://virusscan.jotti.org/en-US/search/hash/" + searchQuery;
-			document.getElementById("socradarioc").href = "https://socradar.io/labs/ioc-radar/" + searchQuery;
-			document.getElementById("socradarTH").href = "https://platform.socradar.com/app/threat-hunting?q=" + searchQuery;
-			document.getElementById("threatyeti").href = "https://threatyeti.com/search?q=" + searchQuery;
-			document.getElementById("pulsedive").href = "https://pulsedive.com/ioc/" + searchQuery;
-			document.getElementById("hunter-email").href = "https://hunter.io/search/" + searchQuery;
-			document.getElementById("crowdsec-intel").href = "https://app.crowdsec.net/cti/" + searchQuery;
-			document.getElementById("scamalytics").href = "https://scamalytics.com/ip/" + searchQuery;
-			document.getElementById("mywot").href = "https://www.mywot.com/scorecard/" + searchQuery;
-			document.getElementById("maltiverse").href = "https://maltiverse.com/search;query=" + searchQuery + ";page=1;sort=creation_time_desc";				
-			document.getElementById("epieos").href = "https://epieos.com/?q=" + searchQuery + "&t=email";
-			document.getElementById("web-check").href = "https://web-check.xyz/results/https%3A%2F%2F" + searchQuery;
-			document.getElementById("crt").href = "https://crt.sh/?q=" + searchQuery;
-			document.getElementById("securitytrails").href = "https://securitytrails.com/list/apex_domain/" + searchQuery;
-			document.getElementById("whoxy").href = "https://www.whoxy.com/" + searchQuery;
-			document.getElementById("leakix").href = "https://leakix.net/search?scope=leak&q=" + searchQuery;
-			document.getElementById("netlas").href = "https://app.netlas.io/host/" + searchQuery;
-			document.getElementById("fullhunt").href = "https://fullhunt.io/search?query=" + searchQuery;
-			document.getElementById("ipvoid").href = "https://www.ipvoid.com/scan/" + searchQuery;
-			document.getElementById("builtwith").href = "https://builtwith.com/" + searchQuery;
-			document.getElementById("similarweb").href = "https://www.similarweb.com/website/" + searchQuery + "/#overview";
-			document.getElementById("scamsearch").href = "https://www.scamsearch.io/search_report?searchoption=all&search=" + searchQuery;
-			document.getElementById("grayhatwarfare").href = "https://buckets.grayhatwarfare.com/files?keywords=" + searchQuery;
-			document.getElementById("arin").href = "https://search.arin.net/rdap/?query=" + searchQuery;			
-		    document.getElementById("valhalla").href = "https://valhalla.nextron-systems.com/info/search?keyword=" + searchQuery;			
-		
-			document.getElementById("ip-to-hostname").href = "https://dnschecker.org/ip-to-hostname.php?query=" + searchQuery;	
-		
-		
-		}
-	</script>
 </body>
 </html>
