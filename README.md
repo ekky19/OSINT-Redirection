@@ -12,7 +12,6 @@ Supports **searching IPs, domains, URLs, and hashes** across dozens of open-sour
 - 🌙 Dark mode toggle (auto default)
 - ⚙️ Tool filtering by name or description
 - ⚡ Simple, fast, and fully client-side — **no backend or tracking**
-- 📎 Smart encoding: Base64, full URI, or direct inject depending on the tool
 - 🧠 Easily extensible: just update the `categories` JSON list in the HTML
 
 ---
@@ -40,15 +39,6 @@ Supports **searching IPs, domains, URLs, and hashes** across dozens of open-sour
 ## 👨‍💻 Credits
 
 🛡️ Made for defenders, by [Ekrem O.](https://www.linkedin.com/in/ekremozdemir19/)
-
----
-
-## 🪄 Roadmap Ideas
-
-- 🔁 Export to CSV
-- 📦 Browser extension version
-- 🧠 ML-based tool ranking
-- 🗂️ Save/load custom toolsets
 
 ---
 
