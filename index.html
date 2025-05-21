@@ -195,20 +195,27 @@
   "Search Tools": [
     { name: 'Virus Total', url: 'https://www.virustotal.com/gui/search/', desc:'Analyse suspicious files, domains, IPs & URLs'},
     { name: 'Web Check', url:'https://web-check.xyz/check/', desc:'All-in-one OSINT website analyzer'},
-    { name: 'IntelX', url:'https://intelx.io/?s=', desc:'Deep-dive OSINT search engine'},
-    { name: 'urlscan.io', url:'https://urlscan.io/search/#', desc:'Scan & analyze URLs'},
-    { name: 'Google Safe Browsing', url:'https://transparencyreport.google.com/safe-browsing/search?url=', desc:'Identify dangerous sites'},
+    { name: 'IntelX', url:'https://intelx.io/?s=', desc:'Emter a domain, URL, Email, IP, CIDR, Bitcoin address, and more...'},
+    { name: 'URL Scan', url:'https://urlscan.io/search/#', desc:'Search for domains, IPs, filenames, hashes, ASNs'},
+    { name: 'Google Safe Browsing', url:'https://transparencyreport.google.com/safe-browsing/search?url=', desc:'Identify dangerous sites, search for unsafe content'},
     { name: 'URLhaus', url:'https://urlhaus.abuse.ch/browse.php?search=', desc:'Malicious URL tracker'},
     { name: 'Hybrid Analysis', url:'https://www.hybrid-analysis.com/search?query=', desc:'Malware analysis & threat intel'},
-    { name: 'Soc Radar IOC', url:'https://socradar.io/labs/ioc-radar/', desc:'Search IOCs'},
-    { name: 'Pulsedive', url:'https://pulsedive.com/ioc/', desc:'Threat intelligence'},
-    { name: 'AbuseIPDB', url:'https://www.abuseipdb.com/check/', desc:'Reported malicious IPs DB'},
-    { name: 'Censys', url:'https://search.censys.io/search?resource=hosts&sort=RELEVANCE&per_page=25&virtual_hosts=EXCLUDE&q=', desc:'Internet device data'},
-    { name:'Shodan', url:'https://www.shodan.io/search?query=', desc:'Internet-connected device search'},
-    { name:'Robtex', url:'https://www.robtex.com/ip-lookup/', desc:'IP lookup tool'},
+	
+    { name: 'Soc Radar IOC', url:'https://socradar.io/labs/ioc-radar/', desc:'Advanced threat intelligence search engine for analyzing IOCs with real-time risk assessment'},
+	
+    { name: 'Pulsedive', url:'https://pulsedive.com/ioc/', desc:'Search any domain, IP, or URL and enrich on-demand with passive and active scans to inform your investigation.'},
+	
+    { name: 'AbuseIPDB', url:'https://www.abuseipdb.com/check/', desc:'Check the report history of any IP address to see if anyone else has reported malicious activities.'},
+    
+	{ name: 'Censys', url:'https://search.censys.io/search?resource=hosts&sort=RELEVANCE&per_page=25&virtual_hosts=EXCLUDE&q=', desc:'Search an IP address, name, protocol or field: value'},
+	
+    { name:'Shodan', url:'https://www.shodan.io/search?query=', desc:'Search Engine for the Internet of Everything'},
+	
     { name:'Netcraft', url:'https://searchdns.netcraft.com/?restriction=site+contains&host=', desc:'Domain tech info'},
-    { name:'WhoisXML', url:'https://whois.whoisxmlapi.com/lookup?q=', desc:'Domain WHOIS data'},
-    { name:'urlvoid', url:'https://www.urlvoid.com/scan/', desc:''},
+	
+    { name:'WhoisXML', url:'https://whois.whoisxmlapi.com/lookup?q=', desc:'Gather all the registration information from a domain’s or an IP address’s corresponding WHOIS records.'},
+	
+    { name:'urlvoid', url:'https://www.urlvoid.com/scan/', desc:'Check the online reputation/safety of a website. #Domain'},
     
 	{
 	  name: 'CentralOps',
@@ -219,7 +226,7 @@
 	{
 	  name: 'Fortiguard',
 	  template: 'https://www.fortiguard.com/search?q={{query}}&engine=7',
-	  desc: 'Fortinet threat intelligence'
+	  desc: 'Submit a Domain to search'
 	},
 
 	{
@@ -228,13 +235,28 @@
 	  desc: 'Meta Defender cloud domain name scanner'
 	},
 
-    { name:'Sucuri', url:'https://sitecheck.sucuri.net/results/', desc:'Website malware checker'},
-    { name:'Threat Yeti', url:'https://threatyeti.com/search?q=', desc:'AI-driven domain/IP intelligence'},
-    { name:'MyWOT', url:'https://www.mywot.com/scorecard/', desc:''},
-    { name:'crt.sh', url:'https://crt.sh/?q=', desc:'Certificate transparency records'},
+    { name:'Sucuri', url:'https://sitecheck.sucuri.net/results/', desc:'Enter a URL and the Sucuri will check the website for known malware, viruses, blacklisting status, website errors, out-of-date software, and malicious code.'},
+    
+	{ name:'Threat Yeti', url:'https://threatyeti.com/search?q=', desc:'Check a link-domain for malware or phishing and get a full security analysis.'},
+	
+    { name:'MyWOT', url:'https://www.mywot.com/scorecard/', desc:'Using a combination of machine learning algorithms and daily updated blacklists'},
+	
+    { name:'crt.sh', url:'https://crt.sh/?q=', desc:'Certificate transparency records, Enter an Domain Name - Organization Name - a Certificate Fingerprint SHA or a crt.sh ID'},
+
     { name:'Security Trails', url:'https://securitytrails.com/', desc:'Domain & DNS data'},
-    { name:'Whoxy', url:'https://www.whoxy.com/', desc:''},
-    { name:'BuiltWith', url:'https://builtwith.com/', desc:''},
+   
+    { name:'Whoxy', url:'https://www.whoxy.com/', desc:'Domain Search Engine'},
+
+    { name:'BuiltWith', url:'https://builtwith.com/', desc:'Find out what websites are Built With'},
+	
+	{ name:'DNS Propagation', url:'https://dnschecker.org/#A/', desc:'Check DNS Propagation'},
+    
+	{
+	  name: 'DNSDumpster',
+	  template: 'https://dnsdumpster.com/?target={{query}}&user=free',
+	  desc: 'Passive DNS and domain mapping tool'
+	},
+
     {
 	  name: 'SimilarWeb',
 	  template: 'https://www.similarweb.com/website/{{query}}/#overview',
@@ -243,17 +265,25 @@
 
   ],
   "IP INFO": [
-    { name:'IP Void', url:'https://www.ipvoid.com/scan/', desc:''},
-    { name:'IP to Hostname', url:'https://dnschecker.org/ip-to-hostname.php?query=', desc:''},
-    { name:'ARIN', url:'https://search.arin.net/rdap/?query=', desc:''},
-    { name:'DomainTools', url:'https://whois.domaintools.com/', desc:''},
-    { name:'IPinfo', url:'https://ipinfo.io/', desc:''},
-    { name:'GeoIP (HackerTarget)', url:'https://api.hackertarget.com/geoip/?q=', desc:''},
-    { name:'DNSLookup HT', url:'https://api.hackertarget.com/dnslookup/?q=', desc:''},
-    { name:'IP Quality Score', url:'https://www.ipqualityscore.com/free-ip-lookup-proxy-vpn-test/lookup/', desc:''},
-    { name:'MaxMind GeoIP2', url:'https://www.maxmind.com/en/geoip2-precision-demo?ip_address=', desc:''},
-    { name:'Spur', url:'https://spur.us/context/', desc:''},
-    
+    { name:'Criminal IP', url:'https://www.criminalip.io/en/asset/search?query=', desc:'Criminal IP is an OSINT search engine specialized in attack surface assessment and threat hunting.'},
+	
+	{ name:'Spur', url:'https://spur.us/context/', desc:'Detect VPNs, Residential proxies, and Bots'},
+	
+    { name:'Scamalytics', url:'https://scamalytics.com/ip/', desc:'IP Address Fraud Check'},
+	
+    { name:'IP Void', url:'https://www.ipvoid.com/scan/', desc:'IP Address Information'},
+    { name:'IP to Hostname', url:'https://dnschecker.org/ip-to-hostname.php?query=', desc:'IP to Hostname Lookup'},
+    { name:'ARIN', url:'https://search.arin.net/rdap/?query=', desc:'Search sites or Whois'},
+    { name:'DomainTools', url:'https://whois.domaintools.com/', desc:'Whois Lookup'},
+    { name:'IPinfo', url:'https://ipinfo.io/', desc:'IP info'},
+    { name:'GeoIP (HackerTarget)', url:'https://api.hackertarget.com/geoip/?q=', desc:'Geo IP'},
+	
+    { name:'DNSLookup HT', url:'https://api.hackertarget.com/dnslookup/?q=', desc:'DNS lookup'},
+	
+    { name:'IP Quality Score', url:'https://www.ipqualityscore.com/free-ip-lookup-proxy-vpn-test/lookup/', desc:'IP lookup and Proxy Detection'},
+	
+    { name:'MaxMind GeoIP2', url:'https://www.maxmind.com/en/geoip2-precision-demo?ip_address=', desc:'IP geolocation and proxy detection'},
+	    
 	{
 	  name: 'MX DNS lookup',
 	  template: 'https://mxtoolbox.com/SuperTool.aspx?action=a%3a{{query}}&run=toolpage',
@@ -266,85 +296,91 @@
 	  desc: 'MX Toolbox'
 	},
    
-    { name:'Whois', url:'https://www.whois.com/whois/', desc:''},
-    { name:'WhatIsMyIP', url:'https://whatismyipaddress.com/ip/', desc:''},
-    { name:'DNS Checker', url:'https://dnschecker.org/#A/', desc:''},
-    
-	{
-	  name: 'DNSDumpster',
-	  template: 'https://dnsdumpster.com/?target={{query}}&user=free',
-	  desc: 'Passive DNS and domain mapping tool'
-	},
-
-	{
+    { name:'Whois', url:'https://www.whois.com/whois/', desc:'whois'},
+	
+    { name:'WhatIsMyIP', url:'https://whatismyipaddress.com/ip/', desc:'what is my ipaddress'},
+	
+    {
 	  name: 'Meta IP',
 	  template: 'https://metadefender.opswat.com/results/ip/{{query}}/overview',
 	  desc: 'Meta Defender IP scanner'
 	},
 	
-    { name:'FeodoTracker', url:'https://feodotracker.abuse.ch/browse.php?search=', desc:''},
-    { name:'Sans ISC', url:'https://isc.sans.edu/ipinfo.html?ip=', desc:''},
+    { name:'FeodoTracker', url:'https://feodotracker.abuse.ch/browse.php?search=', desc:'botnet,C2 tracked by Feodo Tracker, associated with Dridex, TrickBot, QakBot, BazarLoader and Emotet'},
+    { name:'Sans ISC', url:'https://isc.sans.edu/ipinfo.html?ip=', desc:'Sans IP Lookup'},
     {
 	  name: 'BotScout',
 	  template: 'https://botscout.com/search.htm?sterm={{query}}&stype=q',
-	  desc: 'BotScout lookup'
+	  desc: 'Bot Scout lookup'
 	},
 
-    { name:'IPHub', url:'https://iphub.info/?ip=', desc:''},
-    { name:'Criminal IP', url:'https://www.criminalip.io/en/asset/search?query=', desc:''},
-    { name:'Scamalytics', url:'https://scamalytics.com/ip/', desc:''},
-    { name:'Sicehice', url:'https://sicehice.com/search?ip=', desc:''},
-    { name:'Ping IPv4', url:'https://dnschecker.org/ping-ipv4.php?address=', desc:''}
+    { name:'IPHub', url:'https://iphub.info/?ip=', desc:'IPHub is an IP lookup website featuring Proxy/VPN detection.'},
+    
+    { name:'Sicehice', url:'https://sicehice.com/search/', desc:'Bulk IP Searching | Threat Data Aggregation'},
+    { name:'Ping IPv4', url:'https://dnschecker.org/ping-ipv4.php?address=', desc:'Ping ipv4'}
   ],
   "THREAT INTELLIGENCE": [
-    { name:'Microsoft Defender TI', url:'https://ti.defender.microsoft.com/search?query=', desc:''},
-    { name:'IBM X-Force', url:'https://exchange.xforce.ibmcloud.com/', desc:''},
-    { name:'ThreatMiner', url:'https://www.threatminer.org/domain.php?q=', desc:''},
-    { name:'GreyNoise', url:'https://viz.greynoise.io/query/?gnql=', desc:''},
-    { name:'AlienVault OTX', url:'https://otx.alienvault.com/indicator/domain/', desc:''},
-    { name:'Onyphe', url:'https://www.onyphe.io/search?q=category:datascan+', desc:''},
-    { name:'SocRadar TH', url:'https://platform.socradar.com/app/threat-hunting?q=', desc:''},
-    { name:'Talos Intelligence', url:'https://talosintelligence.com/reputation_center/lookup?search=', desc:''},
-    { name:'Falcon Feeds', url:'https://dash.falconfeeds.io/threat-feed/posts', desc:''},
-    { name:'CrowdSec Intel', url:'https://app.crowdsec.net/cti/', desc:''},
+    { name:'IBM X-Force', url:'https://exchange.xforce.ibmcloud.com/search/', desc:'Search by application name, IP address, URL, Vulnerability, Hash, Domain'},
+    
+	{ name:'ThreatMiner', url:'https://www.threatminer.org/host.php?q=', desc:'Search for domains, IPs, Hash, email address or APTnotes, ssl, user-agent, AV family, filename, URI, registry, mutex '},
+    
+	{ name:'GreyNoise', url:'https://viz.greynoise.io/query/?gnql=', desc:'GreyNoise'},
+    
+	{ name:'AlienVault OTX', url:'https://otx.alienvault.com/indicator/domain/', desc:'Open Threat Intelligence Community'},
+    
+	{ name:'Onyphe', url:'https://www.onyphe.io/search?q=category:datascan+', desc:'Data Scan'},
+	
+    { name:'SocRadar TH', url:'https://platform.socradar.com/app/threat-hunting?q=', desc:'Soc Radar'},
+	
+    { name:'Talos Intelligence', url:'https://talosintelligence.com/reputation_center/lookup?search=', desc:'Cisco Talos Intelligence'},
+    
+	{ name:'CrowdSec Intel', url:'https://app.crowdsec.net/cti/', desc:'Explore the CrowdSec Threat Intelligence, and get a full report of IPs.'},
+	
     {
 	  name: 'Maltiverse',
 	  template: 'https://maltiverse.com/search;query={{query}};page=1;sort=creation_time_desc',
 	  desc: 'Maltiverse threat intelligence search'
 	},
 
-    { name:'Mnemonic', url:'https://act-eu1.mnemonic.no/', desc:''},
-    { name:'LeakIX', url:'https://leakix.net/', desc:''},
-    { name:'Dehashed', url:'https://www.dehashed.com/', desc:''}
+    { name:'LeakIX', url:'https://leakix.net/search?scope=leak&q=', desc:'Try * or port:3306 or protocol:mysql or asn:16509 or ip:"13.0.0.0/8"?'}
   ],
+  
   "Hash Lookup": [
-    { name:'Valhalla', url:'https://valhalla.nextron-systems.com', desc:''},
-    { name:'VirusTotal (Hash)', url:'https://www.virustotal.com/gui/search/', desc:''},
-    { name:'Jotti', url:'https://virusscan.jotti.org/en-US/search/hash/', desc:''}
+    { name:'Valhalla', url:'https://valhalla.nextron-systems.com/info/search?keyword=', desc:'Currently serving X amount YARA rules and X Sigma rules #Hash'},
+	
+	
+    { name:'VirusTotal (Hash)', url:'https://www.virustotal.com/gui/search/', desc:'#Hash'},
+	
+    { name:'Jotti', url:'https://virusscan.jotti.org/en-US/search/hash/', desc:'#Hash'}
   ],
   "Email": [
-    { name:'Email Hunter', url:'https://hunter.io/search/', desc:''},
-    { name:'Email Finder', url:'https://hunter.io/find/', desc:'', skipSearch: true },
-    { name:'EmailRep', url:'https://emailrep.io/', desc:'', skipSearch: true },
-    { name:'Email Headers', url:'https://exchangedefender.com/docs/analyzing-smtp-mail-headers', desc:'', skipSearch: true},
+    { name:'Email Hunter', url:'https://hunter.io/search/', desc:'Email Hunter'},
+	
+    { name:'Email Finder', url:'https://hunter.io/find/', desc:'Email Finder', skipSearch: true },
+	
+    { name:'EmailRep', url:'https://emailrep.io/', desc:'Email Reputation', skipSearch: true },
+	
+    { name:'Email Headers', url:'https://exchangedefender.com/docs/analyzing-smtp-mail-headers', desc:'Analyzing SMTP Mail Headers', skipSearch: true},
+	
     {
 	  name: 'Epieos',
 	  template: 'https://epieos.com/?q={{query}}&t=email', 
 	  desc: 'Email lookup via Epieos'
 	},
 
-    { name:'HaveIBeenPwned', url:'https://haveibeenpwned.com/', desc:'', skipSearch: true},
-    { name:'PhoneBook.cz', url:'https://phonebook.cz/', desc:'', skipSearch: true},
-    { name:'Voilanorbert', url:'https://www.voilanorbert.com/', desc:'', skipSearch: true},
-    { name:'Email Checker', url:'https://email-checker.net/', desc:'', skipSearch: true}
+    { name:'HaveIBeenPwned', url:'https://haveibeenpwned.com/', desc:'Check if your email address is in a data breach', skipSearch: true},
+	
+    { name:'Voilanorbert', url:'https://www.voilanorbert.com/', desc:'can find anyone s email address', skipSearch: true},
+	
+    { name:'Email Checker', url:'https://email-checker.net/', desc:'A simple tool to check whether an email address exists.', skipSearch: true}
   ],
   "ATTACK SURFACE": [
-    { name:'FullHunt', url:'https://fullhunt.io/', desc:'', skipSearch: true},
-    { name:'Netlas', url:'https://app.netlas.io/', desc:'', skipSearch: true}
+    { name:'FullHunt', url:'https://fullhunt.io/', desc:'Expose your attack surface', skipSearch: true},
+    { name:'Netlas', url:'https://app.netlas.io/', desc:'Discover, scan and monitor any online assets', skipSearch: true}
   ],
   "VULNERABILITY DATABASE": [
-    { name:'Vulners', url:'https://vulners.com/', desc:'', skipSearch: true},
-    { name:'ExploitDB', url:'https://www.exploit-db.com/', desc:'', skipSearch: true}
+    { name:'Vulners', url:'https://vulners.com/', desc:'Searching through 3M+ vulnerabilities and exploits', skipSearch: true},
+    { name:'ExploitDB', url:'https://www.exploit-db.com/', desc:'Exploit Database', skipSearch: true}
   ],
   "OTHERS": [
     { name:'Intezer', url:'https://analyze.intezer.com/', desc:'', skipSearch: true},
@@ -357,6 +393,7 @@
     { name:'ThreatView', url:'https://threatview.io/', desc:'', skipSearch: true},
     { name:'PhishTank', url:'https://www.phishtank.com/', desc:'', skipSearch: true},
     { name:'icanhazip', url:'https://ipv4.icanhazip.com', desc:'', skipSearch: true},
+	{ name:'Centralops All', url:'https://centralops.net/co/', desc:'Email, Ping, Traceroute, NsLookup - Dig ', skipSearch: true},
     { name:'Cloudflare Radar', url:'https://radar.cloudflare.com/scan', desc:'', skipSearch: true},
     { name:'CurrentMillis', url:'https://currentmillis.com/', desc:'', skipSearch: true},
     { name:'IPTools', url:'https://hackertarget.com/ip-tools/', desc:'', skipSearch: true},
@@ -374,7 +411,16 @@
     { name:'ScamSearch', url:'https://www.scamsearch.io/', desc:'', skipSearch: true},
     { name:'OSINTCrypto', url:'https://github.com/aaarghhh/awesome_osint_criypto_web3_stuff', desc:'', skipSearch: true},
     { name:'GrayHatWarfare', url:'https://buckets.grayhatwarfare.com/', desc:'', skipSearch: true},
+	
+	{ name:'Web Page to PDF', url:'https://www.ipvoid.com/webpage-to-pdf/', desc:'Convert Web Page to PDF', skipSearch: true},
+	
+	{ name:'Domain Age Checker', url:'https://www.ipvoid.com/domain-age-checker/', desc:'Domain age checker', skipSearch: true},
+	
+	
+	
     { name:'WhatsMyName', url:'https://whatsmyname.app/', desc:'', skipSearch: true}
+	
+	
   ],
   "CODE SEARCH": [
     {name: "Grep",url: "https://grep.app/",desc: "Codes Search", skipSearch: true},
