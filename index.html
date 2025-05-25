@@ -230,10 +230,7 @@
 	  opacity: 0.6;
 	  transform: scale(1.03);
 	}
-	
-	.card {
-	  touch-action: pan-y;
-	}
+
 
 	[data-theme="dark"] .tooltip {
 		color: black; 
@@ -251,10 +248,10 @@
     🔍 <strong>Step 1:</strong> Enter any IP address, domain, URL, or hash into the search bar.<br>
     ➕ <strong>Step 2:</strong> Click the <code>ADD</code> button. This will:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;🔗 Automatically append your input to each relevant OSINT tool’s URL.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;📌 Update all tool tools with active links based on your query.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;📌 Update all tool cards with active links based on your query.<br>
 	⚡ <strong>Step 3:</strong> Now simply click any tool to open it in a new tab – each one is already preloaded with your search input!<br><br>
 	
-	✋ <strong>Bonus:</strong> You can <u>reorder tools</u> by dragging and dropping them within or between categories.<br>
+	✋ <strong>Bonus:</strong> You can <u>reorder cards</u> by dragging and dropping them within or between categories.<br>
     💾 Changes are saved automatically in your browser (locally).<br><br>
 	💡 Use the Filter bar below to quickly narrow down tools by name or purpose (e.g., “threat”, “email”, “dns”).<br>
     🧭 Double-click the filter to reset it.<br>
@@ -291,7 +288,7 @@
    
     { name: 'Web Check', url:'https://web-check.xyz/check/', desc:'All-in-one OSINT website analyzer'},
     
-	{ name: 'IntelX', url:'https://intelx.io/?s=', desc:'Emter a domain, URL, Email, IP, CIDR, Bitcoin address, and more...'},
+	{ name: 'IntelX', url:'https://intelx.io/?s=', desc:'Enter a domain, URL, Email, IP, CIDR, Bitcoin address, and more...'},
     
 	{ name: 'URL Scan', url:'https://urlscan.io/search/#', desc:'Search for domains, IPs, filenames, hashes, ASNs'},
     
@@ -409,8 +406,10 @@
 	},
 	
     { name:'FeodoTracker', url:'https://feodotracker.abuse.ch/browse.php?search=', desc:'botnet,C2 tracked by Feodo Tracker, associated with Dridex, TrickBot, QakBot, BazarLoader and Emotet'},
+	
     { name:'Sans ISC', url:'https://isc.sans.edu/ipinfo.html?ip=', desc:'Sans IP Lookup'},
-    {
+    
+	{
 	  name: 'BotScout',
 	  template: 'https://botscout.com/search.htm?sterm={{query}}&stype=q',
 	  desc: 'Bot Scout lookup'
@@ -450,7 +449,6 @@
   "HASH LOOKUP": [
     { name:'Valhalla', url:'https://valhalla.nextron-systems.com/info/search?keyword=', desc:'Currently serving X amount YARA rules and X Sigma rules #Hash'},
 	
-	
     { name:'VirusTotal (Hash)', url:'https://www.virustotal.com/gui/search/', desc:'#Hash'},
 	
 	{ name:'Malshare', url:'https://malshare.com/sample.php?action=detail&hash=', desc:'Recently added Samples Hash'},
@@ -480,6 +478,7 @@
   ],
   "ATTACK SURFACE": [
     { name:'FullHunt', url:'https://fullhunt.io/', desc:'Expose your attack surface', skipSearch: true},
+	
     { name:'Netlas', url:'https://app.netlas.io/', desc:'Discover, scan and monitor any online assets', skipSearch: true}
   ],
   "VULNERABILITY DATABASE": [
@@ -537,29 +536,37 @@
 	{ name:'Web Page to PDF', url:'https://www.ipvoid.com/webpage-to-pdf/', desc:'Convert Web Page to PDF', skipSearch: true},
 	
 	{ name:'Domain Age Checker', url:'https://www.ipvoid.com/domain-age-checker/', desc:'Domain age checker', skipSearch: true},
-	
-	
-	
+		
     { name:'WhatsMyName', url:'https://whatsmyname.app/', desc:'Search usernames', skipSearch: true}
 	
 	
   ],
   "CODE SEARCH": [
     {name: "Grep",url: "https://grep.app/",desc: "Codes Search", skipSearch: true},
+	
 	{name: "Search Code",url: "https://searchcode.com/",desc: "Search Code",skipSearch: true
 	},
+	
 	{name: "Publicwww",url: "https://publicwww.com/",desc: "Source Code Search Engine", skipSearch: true
 	}
   ],
   "NEWS": [
 	  { name: "The Dfir Report", url: "https://thedfirreport.com/", desc: "DFIR writeups and attack reports", skipSearch: true },
+	  
 	  { name: "Week In OSINT", url: "https://sector035.nl/articles/category:week-in-osint", desc: "Weekly OSINT roundup" , skipSearch: true},
+	  
 	  { name: "Bleeping Computer", url: "https://www.bleepingcomputer.com/", desc: "Security news and malware analysis" , skipSearch: true},
+	  
 	  { name: "The Hacker News", url: "https://thehackernews.com/", desc: "Cybersecurity news & threat updates" , skipSearch: true},
+	  
 	  { name: "Security Week", url: "https://www.securityweek.com/", desc: "Latest security & industry trends" , skipSearch: true},
+	  
 	  { name: "Threat Post", url: "https://threatpost.com/", desc: "Cybersecurity research and alerts" , skipSearch: true},
+	  
 	  { name: "Wired", url: "https://www.wired.com/category/security/", desc: "Security and privacy in tech" , skipSearch: true},
+	  
 	  { name: "Cyware", url: "https://cyware.com/cyber-security-news-articles", desc: "Threat news and analysis" , skipSearch: true},
+	  
 	  { name: "Helpnet Security", url: "https://www.helpnetsecurity.com/", desc: "Security news and updates" , skipSearch: true},
 	 
  	  { name: "Darkreading", url: "https://www.darkreading.com/", desc: "Darkreading news" , skipSearch: true},
@@ -573,11 +580,17 @@
 
   "PODCASTS": [
 	  { name: "Breadcrumbs", url: "https://open.spotify.com/show/1PHveMFjdgyxJJAZJWWF8G", desc: "TraceLabs podcast on OSINT" , skipSearch: true},
+	  
 	  { name: "Layer 8 Podcast", url: "https://podcasts.apple.com/us/podcast/layer-8-podcast/id1495404846", desc: "Human side of social engineering" , skipSearch: true},
+	  
 	  { name: "OSINT Show", url: "https://open.spotify.com/show/1vqRjYaq1pPcCdCTtMmFg9", desc: "OSINT interviews and discussion" , skipSearch: true},
+	  
 	  { name: "The OSINT Bunker", url: "https://rss.com/podcasts/theosintbunker/", desc: "Security & OSINT roundtable" , skipSearch: true},
+	  
 	  { name: "Intel Techniques", url: "https://inteltechniques.com/podcast.html", desc: "Privacy and OSINT talk" , skipSearch: true},
+	  
 	  { name: "Janes Podcast", url: "https://podcast.janes.com/public/68/The-World-of-Intelligence-50487d09", desc: "Military and intelligence" , skipSearch: true},
+	  
 	  { name: "Malwarebytes", url: "https://www.malwarebytes.com/blog/category/podcast", desc: "Malwarebytes security podcast", skipSearch: true }
 	],
 	
@@ -626,16 +639,16 @@
         grid.append(card);
       });
 	  
-	  // Enable drag-and-drop for this category
-		Sortable.create(grid, {
-		  group: 'shared',
-		  animation: 150,
-		  ghostClass: 'dragging',
-		  onEnd: saveOrderToLocalStorage,
-		  touchStartThreshold: 10, // helps with scrolling on touch
-		  fallbackOnBody: true,
-		  swapThreshold: 0.65
-		});
+	  // ✅ Enable drag-and-drop only on desktop/tablet (not mobile)
+		if (window.innerWidth > 768) {
+		  Sortable.create(grid, {
+			group: 'shared',
+			animation: 150,
+			ghostClass: 'dragging',
+			onEnd: saveOrderToLocalStorage
+		  });
+		}
+
 
       return section;
     }
@@ -769,10 +782,8 @@ function updateLinks(e) {
     addButton.style.backgroundColor = '';
   }, 500);
 }
-
 	renderAll();
-</script>
-	 
+  </script>	 
 <footer style="margin-top: 3rem; text-align: center; font-size: 0.95rem; padding: 1rem 0; border-top: 1px solid var(--muted); color: var(--muted); transition: all 0.3s ease;">
   🛡️ Made for defenders, by 
   <a href="https://www.linkedin.com/in/ekremozdemir19/" 
