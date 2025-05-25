@@ -230,7 +230,10 @@
 	  opacity: 0.6;
 	  transform: scale(1.03);
 	}
-
+	
+	.card {
+	  touch-action: pan-y;
+	}
 
 	[data-theme="dark"] .tooltip {
 		color: black; 
@@ -628,7 +631,10 @@
 		  group: 'shared',
 		  animation: 150,
 		  ghostClass: 'dragging',
-		  onEnd: saveOrderToLocalStorage
+		  onEnd: saveOrderToLocalStorage,
+		  touchStartThreshold: 10, // helps with scrolling on touch
+		  fallbackOnBody: true,
+		  swapThreshold: 0.65
 		});
 
       return section;
