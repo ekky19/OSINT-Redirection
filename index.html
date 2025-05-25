@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>OSINT Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+  
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+  
   <style>
+  
     :root {
       --bg: #f5f7fa;
       --card-bg: #ffffff;
@@ -167,59 +171,64 @@
 	
 	/* === HOW IT WORKS SECTION STYLES === */
 	
-.dashboard-title-wrapper {
-  position: relative;
-  display: inline-block;
-}
+	.dashboard-title-wrapper {
+	  position: relative;
+	  display: inline-block;
+	}
 
-.dashboard-tooltip {
-  visibility: hidden;
-  opacity: 0;
-  width: 360px;
-  background-color: #2e3a47;
-  color: #f0f0f0;
-  text-align: left;
-  border-radius: 10px;
-  padding: 1rem;
-  position: absolute;
-  z-index: 999;
-  top: 120%;
-  left: 0;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-  transition: opacity 0.3s ease;
-  font-size: 0.9rem;
-  line-height: 1.5;
-}
+	.dashboard-tooltip {
+	  visibility: hidden;
+	  opacity: 0;
+	  width: 360px;
+	  background-color: #2e3a47;
+	  color: #f0f0f0;
+	  text-align: left;
+	  border-radius: 10px;
+	  padding: 1rem;
+	  position: absolute;
+	  z-index: 999;
+	  top: 120%;
+	  left: 0;
+	  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+	  transition: opacity 0.3s ease;
+	  font-size: 0.9rem;
+	  line-height: 1.5;
+	}
 
-/* Show tooltip on hover */
-.dashboard-title-wrapper:hover .dashboard-tooltip {
-  visibility: visible;
-  opacity: 1;
-}
+	/* Show tooltip on hover */
+	.dashboard-title-wrapper:hover .dashboard-tooltip {
+	  visibility: visible;
+	  opacity: 1;
+	}
 
-/* Responsive: prevent overflow on right side */
-@media (max-width: 600px) {
-  .dashboard-tooltip {
-    left: auto;
-    right: 0;
-    width: 90vw;
-  }
-}
-.dashboard-tooltip {
-  overflow-wrap: break-word;
-  white-space: normal;
-  max-width: 90vw;
-}
+	/* Responsive: prevent overflow on right side */
+	@media (max-width: 600px) {
+	  .dashboard-tooltip {
+		left: auto;
+		right: 0;
+		width: 90vw;
+	  }
+	}
+	
+	.dashboard-tooltip {
+	  overflow-wrap: break-word;
+	  white-space: normal;
+	  max-width: 90vw;
+	}
 
-[data-theme="dark"] .dashboard-tooltip {
-  background-color: #2e3a47;
-  color: #e5e7eb;
-}
-
+	[data-theme="dark"] .dashboard-tooltip {
+	  background-color: #2e3a47;
+	  color: #e5e7eb;
+	}
 
 	[data-theme="dark"] .fancy-tooltip .tooltip-content {
 	  background-color: #2e3a47;
 	  color: #e5e7eb;
+	}
+
+	.dragging {
+	  opacity: 0.6;
+	  transform: scale(1.03);
 	}
 
 
@@ -239,8 +248,11 @@
     🔍 <strong>Step 1:</strong> Enter any IP address, domain, URL, or hash into the search bar.<br>
     ➕ <strong>Step 2:</strong> Click the <code>ADD</code> button. This will:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;🔗 Automatically append your input to each relevant OSINT tool’s URL.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;📌 Update all tool cards with active links based on your query.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;📌 Update all tool tools with active links based on your query.<br>
 	⚡ <strong>Step 3:</strong> Now simply click any tool to open it in a new tab – each one is already preloaded with your search input!<br><br>
+	
+	✋ <strong>Bonus:</strong> You can <u>reorder tools</u> by dragging and dropping them within or between categories.<br>
+    💾 Changes are saved automatically in your browser (locally).<br><br>
 	💡 Use the Filter bar below to quickly narrow down tools by name or purpose (e.g., “threat”, “email”, “dns”).<br>
     🧭 Double-click the filter to reset it.<br>
 	🔒 Some tools don’t use input and are skipped automatically.
@@ -610,6 +622,15 @@
         card.append(link, tip);
         grid.append(card);
       });
+	  
+	  // Enable drag-and-drop for this category
+		Sortable.create(grid, {
+		  group: 'shared',
+		  animation: 150,
+		  ghostClass: 'dragging',
+		  onEnd: saveOrderToLocalStorage
+		});
+
       return section;
     }
 
@@ -629,13 +650,53 @@
 	  }
 	});
 
+function saveOrderToLocalStorage() {
+  const order = {};
+  document.querySelectorAll('.section').forEach(section => {
+    const category = section.querySelector('h2').textContent.trim();
+    const toolNames = Array.from(section.querySelectorAll('.card a')).map(a => a.textContent.trim());
+    order[category] = toolNames;
+  });
+  localStorage.setItem('osintToolOrder', JSON.stringify(order));
+}
 
+	//  drag-and-drop Functions
+	function loadOrderFromLocalStorage() {
+	  try {
+		const saved = JSON.parse(localStorage.getItem('osintToolOrder'));
+		if (!saved) return categories;
+
+		const newCategories = {};
+		for (const [category, tools] of Object.entries(saved)) {
+		  const original = categories[category] || [];
+		  newCategories[category] = tools
+			.map(name => original.find(t => t.name === name))
+			.filter(Boolean);
+
+		  // Add back any tools not found (maybe added later)
+		  const leftovers = original.filter(t => !tools.includes(t.name));
+		  newCategories[category] = [...newCategories[category], ...leftovers];
+		}
+
+		return newCategories;
+	  } catch (e) {
+		return categories;
+	  }
+	}
+
+	  
     function renderAll(filter = '') {
-      const container = document.getElementById('content'); container.innerHTML = '';
-      Object.entries(categories).forEach(([title, items]) => {
-        const filtered = items.filter(t => t.name.toLowerCase().includes(filter) || t.desc.toLowerCase().includes(filter));
-        if (filtered.length) container.append(renderCategory(title, filtered));
-      });
+      const container = document.getElementById('content');
+	  container.innerHTML = '';
+	  const orderedCategories = loadOrderFromLocalStorage();
+
+	  //This ensures the saved order is respected when rendering.
+	  Object.entries(orderedCategories).forEach(([title, items]) => {
+		const filteredItems = filter
+		  ? items.filter(t => t.name.toLowerCase().includes(filter) || t.desc.toLowerCase().includes(filter))
+		  : items;
+		container.append(renderCategory(title, filteredItems));
+	  });
     }
 
     document.getElementById('filter').addEventListener('input', e => {
@@ -703,10 +764,8 @@ function updateLinks(e) {
   }, 500);
 }
 
-
-
 	renderAll();
-  </script>
+</script>
 	 
 <footer style="margin-top: 3rem; text-align: center; font-size: 0.95rem; padding: 1rem 0; border-top: 1px solid var(--muted); color: var(--muted); transition: all 0.3s ease;">
   🛡️ Made for defenders, by 
