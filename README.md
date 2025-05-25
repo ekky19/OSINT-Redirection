@@ -18,7 +18,7 @@ Supports **searching IPs, domains, URLs, and hashes** across dozens of open-sour
 
 ## 🚀 How to Use
 
-1. **Open `OSINT.html`** in your browser  
+1. **Open `index.html`** in your browser  
 2. Type an IP, domain, hash, email, or keyword  
 3. Click `ADD` to auto-populate links across all relevant tools  
 4. Use the filter bar to find tools by name or purpose  
