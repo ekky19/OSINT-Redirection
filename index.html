@@ -30,6 +30,10 @@
       margin: 0;
       padding: 0;
     }
+	html, body {
+		max-width: 100%;
+		overflow-x: hidden;
+	}
     body {
       font-family: 'Inter', sans-serif;
       background: var(--bg);
@@ -161,6 +165,64 @@
 	  
     }
 	
+	/* === HOW IT WORKS SECTION STYLES === */
+	
+.dashboard-title-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.dashboard-tooltip {
+  visibility: hidden;
+  opacity: 0;
+  width: 360px;
+  background-color: #2e3a47;
+  color: #f0f0f0;
+  text-align: left;
+  border-radius: 10px;
+  padding: 1rem;
+  position: absolute;
+  z-index: 999;
+  top: 120%;
+  left: 0;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  transition: opacity 0.3s ease;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Show tooltip on hover */
+.dashboard-title-wrapper:hover .dashboard-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Responsive: prevent overflow on right side */
+@media (max-width: 600px) {
+  .dashboard-tooltip {
+    left: auto;
+    right: 0;
+    width: 90vw;
+  }
+}
+.dashboard-tooltip {
+  overflow-wrap: break-word;
+  white-space: normal;
+  max-width: 90vw;
+}
+
+[data-theme="dark"] .dashboard-tooltip {
+  background-color: #2e3a47;
+  color: #e5e7eb;
+}
+
+
+	[data-theme="dark"] .fancy-tooltip .tooltip-content {
+	  background-color: #2e3a47;
+	  color: #e5e7eb;
+	}
+
+
 	[data-theme="dark"] .tooltip {
 		color: black; 
 	}
@@ -170,13 +232,30 @@
 
 <body data-theme="dark">
   <header>
-    <h1>OSINT Dashboard</h1>
+  
+<div class="dashboard-title-wrapper">
+  <h1 class="dashboard-title">OSINT Dashboard</h1>
+  <div class="dashboard-tooltip">
+    🔍 <strong>Step 1:</strong> Enter any IP address, domain, URL, or hash into the search bar.<br>
+    ➕ <strong>Step 2:</strong> Click the <code>ADD</code> button. This will:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;🔗 Automatically append your input to each relevant OSINT tool’s URL.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;📌 Update all tool cards with active links based on your query.<br>
+	⚡ <strong>Step 3:</strong> Now simply click any tool to open it in a new tab – each one is already preloaded with your search input!<br><br>
+	💡 Use the Filter bar below to quickly narrow down tools by name or purpose (e.g., “threat”, “email”, “dns”).<br>
+    🧭 Double-click the filter to reset it.<br>
+	🔒 Some tools don’t use input and are skipped automatically.
+  </div>
+</div>
+
+
+
     <button class="toggle" id="theme-toggle" aria-label="Toggle dark mode">🌓</button>
   </header>
 
   <form class="search-bar" onsubmit="updateLinks(event)">
     <input id="search" placeholder="Enter IP, URL or hash..." required />
-    <button type="submit">ADD</button>
+    <button type="submit" title="Append your input to each tool's URL and update all links">ADD</button>
+
   </form>
 
   <div class="filter-bar">
@@ -192,20 +271,26 @@
     };
 
    const categories = {
-  "Search Tools": [
+  "SEARCH TOOLS": [
     { name: 'Virus Total', url: 'https://www.virustotal.com/gui/search/', desc:'Analyse suspicious files, domains, IPs & URLs'},
+   
     { name: 'Web Check', url:'https://web-check.xyz/check/', desc:'All-in-one OSINT website analyzer'},
-    { name: 'IntelX', url:'https://intelx.io/?s=', desc:'Emter a domain, URL, Email, IP, CIDR, Bitcoin address, and more...'},
-    { name: 'URL Scan', url:'https://urlscan.io/search/#', desc:'Search for domains, IPs, filenames, hashes, ASNs'},
-    { name: 'Google Safe Browsing', url:'https://transparencyreport.google.com/safe-browsing/search?url=', desc:'Identify dangerous sites, search for unsafe content'},
-    { name: 'URLhaus', url:'https://urlhaus.abuse.ch/browse.php?search=', desc:'Malicious URL tracker'},
-    { name: 'Hybrid Analysis', url:'https://www.hybrid-analysis.com/search?query=', desc:'Malware analysis & threat intel'},
+    
+	{ name: 'IntelX', url:'https://intelx.io/?s=', desc:'Emter a domain, URL, Email, IP, CIDR, Bitcoin address, and more...'},
+    
+	{ name: 'URL Scan', url:'https://urlscan.io/search/#', desc:'Search for domains, IPs, filenames, hashes, ASNs'},
+    
+	{ name: 'Google Safe Browsing', url:'https://transparencyreport.google.com/safe-browsing/search?url=', desc:'Identify dangerous sites, search for unsafe content'},
+    
+	{ name: 'URL Haus', url:'https://urlhaus.abuse.ch/browse.php?search=', desc:'Malicious URL tracker'},
+    
+	{ name: 'Hybrid Analysis', url:'https://www.hybrid-analysis.com/search?query=', desc:'Malware analysis & threat intel'},
 	
     { name: 'Soc Radar IOC', url:'https://socradar.io/labs/ioc-radar/', desc:'Advanced threat intelligence search engine for analyzing IOCs with real-time risk assessment'},
 	
     { name: 'Pulsedive', url:'https://pulsedive.com/ioc/', desc:'Search any domain, IP, or URL and enrich on-demand with passive and active scans to inform your investigation.'},
 	
-    { name: 'AbuseIPDB', url:'https://www.abuseipdb.com/check/', desc:'Check the report history of any IP address to see if anyone else has reported malicious activities.'},
+    { name: 'Abuse IP DB', url:'https://www.abuseipdb.com/check/', desc:'Check the report history of any IP address to see if anyone else has reported malicious activities.'},
     
 	{ name: 'Censys', url:'https://search.censys.io/search?resource=hosts&sort=RELEVANCE&per_page=25&virtual_hosts=EXCLUDE&q=', desc:'Search an IP address, name, protocol or field: value'},
 	
@@ -215,7 +300,7 @@
 	
     { name:'WhoisXML', url:'https://whois.whoisxmlapi.com/lookup?q=', desc:'Gather all the registration information from a domain’s or an IP address’s corresponding WHOIS records.'},
 	
-    { name:'urlvoid', url:'https://www.urlvoid.com/scan/', desc:'Check the online reputation/safety of a website. #Domain'},
+    { name:'URL Void', url:'https://www.urlvoid.com/scan/', desc:'Check the online reputation/safety of a website. #Domain'},
     
 	{
 	  name: 'CentralOps',
@@ -243,22 +328,22 @@
 	
     { name:'crt.sh', url:'https://crt.sh/?q=', desc:'Certificate transparency records, Enter an Domain Name - Organization Name - a Certificate Fingerprint SHA or a crt.sh ID'},
 
-    { name:'Security Trails', url:'https://securitytrails.com/', desc:'Domain & DNS data'},
+    { name:'Security Trails', url:'https://securitytrails.com/domain/', desc:'Domain & DNS data'},
    
     { name:'Whoxy', url:'https://www.whoxy.com/', desc:'Domain Search Engine'},
 
-    { name:'BuiltWith', url:'https://builtwith.com/', desc:'Find out what websites are Built With'},
+    { name:'Built With', url:'https://builtwith.com/', desc:'Find out what websites are Built With'},
 	
 	{ name:'DNS Propagation', url:'https://dnschecker.org/#A/', desc:'Check DNS Propagation'},
     
 	{
-	  name: 'DNSDumpster',
+	  name: 'DNS Dumpster',
 	  template: 'https://dnsdumpster.com/?target={{query}}&user=free',
 	  desc: 'Passive DNS and domain mapping tool'
 	},
 
     {
-	  name: 'SimilarWeb',
+	  name: 'Similar Web',
 	  template: 'https://www.similarweb.com/website/{{query}}/#overview',
 	  desc: 'Website traffic and ranking data'
 	}
@@ -300,6 +385,8 @@
 	
     { name:'WhatIsMyIP', url:'https://whatismyipaddress.com/ip/', desc:'what is my ipaddress'},
 	
+	{ name:'icanhazip', url:'https://ipv4.icanhazip.com', desc:'what is my ipaddress', skipSearch: true},
+		
     {
 	  name: 'Meta IP',
 	  template: 'https://metadefender.opswat.com/results/ip/{{query}}/overview',
@@ -345,15 +432,17 @@
     { name:'LeakIX', url:'https://leakix.net/search?scope=leak&q=', desc:'Try * or port:3306 or protocol:mysql or asn:16509 or ip:"13.0.0.0/8"?'}
   ],
   
-  "Hash Lookup": [
+  "HASH LOOKUP": [
     { name:'Valhalla', url:'https://valhalla.nextron-systems.com/info/search?keyword=', desc:'Currently serving X amount YARA rules and X Sigma rules #Hash'},
 	
 	
     { name:'VirusTotal (Hash)', url:'https://www.virustotal.com/gui/search/', desc:'#Hash'},
 	
+	{ name:'Malshare', url:'https://malshare.com/sample.php?action=detail&hash=', desc:'Recently added Samples Hash'},
+	
     { name:'Jotti', url:'https://virusscan.jotti.org/en-US/search/hash/', desc:'#Hash'}
   ],
-  "Email": [
+  "EMAIL": [
     { name:'Email Hunter', url:'https://hunter.io/search/', desc:'Email Hunter'},
 	
     { name:'Email Finder', url:'https://hunter.io/find/', desc:'Email Finder', skipSearch: true },
@@ -383,34 +472,52 @@
     { name:'ExploitDB', url:'https://www.exploit-db.com/', desc:'Exploit Database', skipSearch: true}
   ],
   "OTHERS": [
-    { name:'Intezer', url:'https://analyze.intezer.com/', desc:'', skipSearch: true},
-    { name:'Browserling', url:'https://www.browserling.com/browse/win/7/chrome/109/', desc:'', skipSearch: true},
-    { name:'ANY.RUN', url:'https://app.any.run/', desc:'', skipSearch: true},
-    { name:'JoeSandbox', url:'https://www.joesandbox.com/', desc:'', skipSearch: true},
-    { name:'Malshare', url:'https://malshare.com/', desc:'', skipSearch: true},
-    { name:'CyberChef', url:'https://gchq.github.io/CyberChef/', desc:'', skipSearch: true},
-    { name:'OpenPhish', url:'https://openphish.com/', desc:'', skipSearch: true},
-    { name:'ThreatView', url:'https://threatview.io/', desc:'', skipSearch: true},
-    { name:'PhishTank', url:'https://www.phishtank.com/', desc:'', skipSearch: true},
-    { name:'icanhazip', url:'https://ipv4.icanhazip.com', desc:'', skipSearch: true},
+    { name:'Intezer', url:'https://analyze.intezer.com/', desc:'intezer', skipSearch: true},
+    
+	{ name:'Browserling', url:'https://www.browserling.com/', desc:'Start browsing in 5 seconds!', skipSearch: true},
+    
+	{ name:'ANY.RUN', url:'https://app.any.run/', desc:'Interact with Windows, Linux, and Android OS directly and immediately see the feedback from your actions.', skipSearch: true},
+	
+    { name:'JoeSandbox', url:'https://www.joesandbox.com/', desc:'Sandbox - Deep Malware Analysis', skipSearch: true},
+	
+    
+    { name:'CyberChef', url:'https://gchq.github.io/CyberChef/', desc:'CyberChef', skipSearch: true},
+	
+    { name:'ThreatView', url:'https://threatview.io/', desc:'Actionable cyber threat intelligence feeds', skipSearch: true},
+	
+    { name:'PhishTank', url:'https://www.phishtank.com/', desc:'Found a phishing site? ', skipSearch: true},
+	
 	{ name:'Centralops All', url:'https://centralops.net/co/', desc:'Email, Ping, Traceroute, NsLookup - Dig ', skipSearch: true},
-    { name:'Cloudflare Radar', url:'https://radar.cloudflare.com/scan', desc:'', skipSearch: true},
-    { name:'CurrentMillis', url:'https://currentmillis.com/', desc:'', skipSearch: true},
-    { name:'IPTools', url:'https://hackertarget.com/ip-tools/', desc:'', skipSearch: true},
-    { name:'ScreenshotMachine', url:'https://www.screenshotmachine.com/', desc:'', skipSearch: true},
-    { name:'SocRadArtTools', url:'https://socradar.io/labs/soc-tools/ip-reputation', desc:'', skipSearch: true},
-    { name:'SophosIntelix', url:'https://intelix.sophos.com/url', desc:'', skipSearch: true},
-    { name:'CheckPhish', url:'https://checkphish.ai/', desc:'', skipSearch: true},
-    { name:'RocketReach', url:'https://rocketreach.co/person', desc:'', skipSearch: true},
-    { name:'ZoomEye', url:'https://www.zoomeye.org/', desc:'', skipSearch: true},
-    { name:'OSINTFramework', url:'https://osintframework.com/', desc:'', skipSearch: true},
-    { name:'MyOSINT Tools', url:'https://www.myosint.training/pages/projects', desc:'', skipSearch: true},
-    { name:'ViewDNS', url:'https://viewdns.info/', desc:'', skipSearch: true},
-    { name:'Google Advanced', url:'https://www.google.com/advanced_search', desc:'', skipSearch: true},
-    { name:'DorkSearch', url:'https://dorksearch.com/', desc:'', skipSearch: true},
-    { name:'ScamSearch', url:'https://www.scamsearch.io/', desc:'', skipSearch: true},
-    { name:'OSINTCrypto', url:'https://github.com/aaarghhh/awesome_osint_criypto_web3_stuff', desc:'', skipSearch: true},
-    { name:'GrayHatWarfare', url:'https://buckets.grayhatwarfare.com/', desc:'', skipSearch: true},
+	
+    { name:'Cloudflare Radar', url:'https://radar.cloudflare.com/scan', desc:'URL Scanner', skipSearch: true},
+	
+    { name:'CurrentMillis', url:'https://currentmillis.com/', desc:'currentmillis', skipSearch: true},
+	
+    { name:'IPTools', url:'https://hackertarget.com/ip-tools/', desc:'IP Tools', skipSearch: true},
+   
+    { name:'Screenshot Machine', url:'https://www.screenshotmachine.com/', desc:'Screen Shot', skipSearch: true},
+	
+    { name:'Socradar Tools', url:'https://socradar.io/labs/soc-tools/ip-reputation', desc:'Soc Tools', skipSearch: true},
+	
+    { name:'Sophos Intel', url:'https://intelix.sophos.com/url', desc:'Submit your file or URL, get back reports from a full analysis using SophosLabs Intelix.', skipSearch: true},
+    
+	{ name:'Check Phish', url:'https://checkphish.bolster.ai/', desc:'CheckPhish is a free real-time URL scanner providing deep threat intelligence, including screenshots, certificates, DOM Tree, and hosting details. ', skipSearch: true},
+	
+    { name:'RocketReach', url:'https://rocketreach.co/person', desc:'Tell us what you are looking for: LinkedIn URL, Job Title, Industry etc.', skipSearch: true},
+	
+    { name:'ZoomEye', url:'https://www.zoomeye.org/', desc:'zoomeye', skipSearch: true},
+	
+    { name:'OSINT Framework', url:'https://osintframework.com/', desc:'Osint Framework', skipSearch: true},
+	
+    { name:'DNS Info', url:'https://viewdns.info/', desc:'', skipSearch: true},
+	
+    { name:'Google Advanced', url:'https://www.google.com/advanced_search', desc:'Google Advanced Search', skipSearch: true},
+	
+    { name:'Dork Search', url:'https://dorksearch.com/', desc:'Dork Search', skipSearch: true},
+    
+    { name:'OSINT Crypto', url:'https://github.com/aaarghhh/awesome_osint_blockchain_analysis', desc:'A list of useful Crypto resources for OSINT investigations', skipSearch: true},
+	
+    { name:'Gray Hat War Fare', url:'https://buckets.grayhatwarfare.com/', desc:'Lists open s3 buckets and helps you search for interesting files.', skipSearch: true},
 	
 	{ name:'Web Page to PDF', url:'https://www.ipvoid.com/webpage-to-pdf/', desc:'Convert Web Page to PDF', skipSearch: true},
 	
@@ -418,7 +525,7 @@
 	
 	
 	
-    { name:'WhatsMyName', url:'https://whatsmyname.app/', desc:'', skipSearch: true}
+    { name:'WhatsMyName', url:'https://whatsmyname.app/', desc:'Search usernames', skipSearch: true}
 	
 	
   ],
@@ -439,8 +546,13 @@
 	  { name: "Wired", url: "https://www.wired.com/category/security/", desc: "Security and privacy in tech" , skipSearch: true},
 	  { name: "Cyware", url: "https://cyware.com/cyber-security-news-articles", desc: "Threat news and analysis" , skipSearch: true},
 	  { name: "Helpnet Security", url: "https://www.helpnetsecurity.com/", desc: "Security news and updates" , skipSearch: true},
-	  { name: "Darkreading", url: "https://www.darkreading.com/threat-intelligence", desc: "Threat intelligence and defense" , skipSearch: true},
-	  { name: "Infosecurity Magazine", url: "https://www.infosecurity-magazine.com/threat-intelligence/", desc: "Security news magazine" , skipSearch: true},
+	 
+ 	  { name: "Darkreading", url: "https://www.darkreading.com/", desc: "Darkreading news" , skipSearch: true},
+	  
+	  { name: "Infosecurity Magazine", url: "https://www.infosecurity-magazine.com", desc: "Security news magazine" , skipSearch: true},
+	  
+	  { name: "Techurls", url: "https://techurls.com/", desc: "Tech Urls by Browserling" , skipSearch: true},	   
+	   
 	  { name: "Trendmicro", url: "https://www.trendmicro.com/vinfo/us/security/news/vulnerabilities-and-exploits", desc: "Exploit and threat updates" , skipSearch: true}
 	],
 
@@ -453,6 +565,14 @@
 	  { name: "Janes Podcast", url: "https://podcast.janes.com/public/68/The-World-of-Intelligence-50487d09", desc: "Military and intelligence" , skipSearch: true},
 	  { name: "Malwarebytes", url: "https://www.malwarebytes.com/blog/category/podcast", desc: "Malwarebytes security podcast", skipSearch: true }
 	],
+	
+	"POSTERS": [
+	  { name: "13cubed", url: "https://training.13cubed.com/downloads", desc: "13cubed Posters" , skipSearch: true},
+	  
+	  { name: "SANS", url: "https://www.sans.org/posters/?content-language=english", desc: "SANS Posters" , skipSearch: true}
+	  
+	],
+	
 	"USEFUL THINGS": [
 	  {
 		name: "Lolbas",
@@ -596,10 +716,7 @@ function updateLinks(e) {
      style="color: var(--primary); font-weight: 600; text-decoration: none; transition: color 0.3s ease;">
     Ekrem O.
   </a>
+  
 </footer>
-
-
-
-
 </body>
 </html>
