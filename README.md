@@ -35,6 +35,19 @@ Supports **searching IPs, domains, URLs, and hashes** across dozens of open-sour
 - Explore reputation scores and threat rankings with 1 click
 
 ---
+🧼 Reset Layout (For New Tools or Categories)
+If you add a new tool or category and it doesn't show up:
+
+Open DevTools (F12 → Console)
+
+Paste this:
+
+localStorage.removeItem("osintToolOrder");
+
+Refresh the page (Ctrl+Shift+R)
+
+Done ✅
+---
 
 ## 👨‍💻 Credits
 
