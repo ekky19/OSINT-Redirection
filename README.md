@@ -35,18 +35,28 @@ Supports **searching IPs, domains, URLs, and hashes** across dozens of open-sour
 - Explore reputation scores and threat rankings with 1 click
 
 ---
-🧼 Reset Layout (For New Tools or Categories)
+Here’s a GitHub README-friendly version with proper markdown formatting:
+
+````markdown
+### 🧼 Reset Layout (For New Tools or Categories)
+
 If you add a new tool or category and it doesn't show up:
 
-Open DevTools (F12 → Console)
+1. Open DevTools → Console (`F12`)
+2. Paste this:
+   ```js
+   localStorage.removeItem("osintToolOrder");
+````
 
-Paste this:
+3. Refresh the page (`Ctrl+Shift+R`)
 
-localStorage.removeItem("osintToolOrder");
+✅ Done!
 
-Refresh the page (Ctrl+Shift+R)
+```
 
-Done ✅
+Let me know if you want it collapsed into a `<details>` block too.
+```
+
 ---
 
 ## 👨‍💻 Credits
