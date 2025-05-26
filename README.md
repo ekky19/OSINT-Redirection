@@ -45,7 +45,7 @@ If you add a new tool or category and it doesn't show up:
    ```js
    localStorage.removeItem("osintToolOrder");
 3. Refresh the page (`Ctrl+Shift+R`)
-````
+
 ✅ Done!
 ---
 
