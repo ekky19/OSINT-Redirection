@@ -35,9 +35,7 @@ Supports **searching IPs, domains, URLs, and hashes** across dozens of open-sour
 - Explore reputation scores and threat rankings with 1 click
 
 ---
-Here’s a GitHub README-friendly version with proper markdown formatting:
 
-````markdown
 ### 🧼 Reset Layout (For New Tools or Categories)
 
 If you add a new tool or category and it doesn't show up:
@@ -46,17 +44,9 @@ If you add a new tool or category and it doesn't show up:
 2. Paste this:
    ```js
    localStorage.removeItem("osintToolOrder");
-````
-
 3. Refresh the page (`Ctrl+Shift+R`)
-
+````
 ✅ Done!
-
-```
-
-Let me know if you want it collapsed into a `<details>` block too.
-```
-
 ---
 
 ## 👨‍💻 Credits
