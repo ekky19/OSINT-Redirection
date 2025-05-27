@@ -24,6 +24,7 @@ Supports **searching IPs, domains, URLs, and hashes** across dozens of open-sour
 4. Use the filter bar to find tools by name or purpose  
 5. Click a card to open the tool in a new tab
 
+Note: Tools marked with 🔶 work standalone and do not reflect search queries from the dashboard.
 ---
 
 ## 🧩 Example Use Cases
