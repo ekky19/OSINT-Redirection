@@ -335,9 +335,9 @@
 	},
 
 	{
-	  name: 'Meta Domain',
+	  name: 'Meta',
 	  template: 'https://metadefender.opswat.com/results/domain/{{query}}/overview',
-	  desc: 'Meta Defender cloud domain name scanner'
+	  desc: 'Analyze a File, URL, IP, Hash or CVE'
 	},
 
     { name:'Sucuri', url:'https://sitecheck.sucuri.net/results/', desc:'Enter a URL and the Sucuri will check the website for known malware, viruses, blacklisting status, website errors, out-of-date software, and malicious code.'},
@@ -407,12 +407,6 @@
 	
 	{ name:'icanhazip', url:'https://ipv4.icanhazip.com', desc:'what is my ipaddress', skipSearch: true},
 		
-    {
-	  name: 'Meta IP',
-	  template: 'https://metadefender.opswat.com/results/ip/{{query}}/overview',
-	  desc: 'Meta Defender IP scanner'
-	},
-	
     { name:'FeodoTracker', url:'https://feodotracker.abuse.ch/browse.php?search=', desc:'botnet,C2 tracked by Feodo Tracker, associated with Dridex, TrickBot, QakBot, BazarLoader and Emotet'},
 	
     { name:'Sans ISC', url:'https://isc.sans.edu/ipinfo.html?ip=', desc:'Sans IP Lookup'},
@@ -431,9 +425,9 @@
   "THREAT INTELLIGENCE": [
     { name:'IBM X-Force', url:'https://exchange.xforce.ibmcloud.com/search/', desc:'Search by application name, IP address, URL, Vulnerability, Hash, Domain'},
     
-	{ name:'ThreatMiner', url:'https://www.threatminer.org/host.php?q=', desc:'Search for domains, IPs, Hash, email address or APTnotes, ssl, user-agent, AV family, filename, URI, registry, mutex '},
+	{ name:'Threat Miner', url:'https://www.threatminer.org/host.php?q=', desc:'Search for domains, IPs, Hash, email address or APTnotes, ssl, user-agent, AV family, filename, URI, registry, mutex '},
     
-	{ name:'GreyNoise', url:'https://viz.greynoise.io/query/?gnql=', desc:'GreyNoise'},
+	{ name:'Grey Noise', url:'https://viz.greynoise.io/query/', desc:'GreyNoise tags are a signature-based detection method used to identify actors, tools, and CVEs in our data.'},
     
 	{ name:'AlienVault OTX', url:'https://otx.alienvault.com/indicator/domain/', desc:'Open Threat Intelligence Community'},
     
@@ -787,23 +781,67 @@ function updateLinks(e) {
       t.originalUrl = t.template || t.url;
     }
 
-    let finalQuery = encoded;
+    const isIP = /^[\d.]+$/.test(cleaned); // basic IPv4 check
+	let finalQuery = encoded;
 
     // ✅ Tools needing full URL-encoded raw input
-    if (t.originalUrl.includes("web-check.xyz")) {
+    if (t.originalUrl.includes("web-check.xyz")) 
+	{
       finalQuery = fullEncoded;
     }
 
     // ✅ MetaDefender: use base64 encoding
-    if (t.originalUrl.includes("metadefender.opswat.com")) {
+    if (t.originalUrl.includes("metadefender.opswat.com")) 
+	{
       finalQuery = base64;
     }
+	//Some tools use different links for IPs vs. domains — define them separately here.
+	//this custom logic completely overrides the url defined in categories, so it doesn't matter what you initially put in url: for GreyNoise.
+    if (t.name === "Grey Noise") {
+	  t.url = isIP
+		? `https://viz.greynoise.io/ip/${cleaned}`
+		: `https://viz.greynoise.io/query/${cleaned}`;
+	} 
+	
+	else if (t.name === "Silent Push") {
+	  t.url = isIP
+		? `https://explore.silentpush.com/enrichment/ipv4/${cleaned}`
+		: `https://explore.silentpush.com/enrichment/domain/${cleaned}`;
+	}
 
-    if (t.template) {
-      t.url = t.originalUrl.replaceAll('{{query}}', finalQuery);
-    } else {
-      t.url = t.originalUrl + finalQuery;
-    }
+	else if (t.name === "Shodan") {
+	  t.url = isIP
+		? `https://www.shodan.io/host/${cleaned}`
+		: `https://www.shodan.io/search?query=${encoded}`;
+	}
+	
+	else if (t.originalUrl.includes("metadefender.opswat.com")) {
+	  const base64Value = btoa(cleaned);
+	  t.url = isIP
+		? `https://metadefender.opswat.com/results/ip/${base64Value}`
+		: `https://metadefender.opswat.com/results/domain/${base64Value}`;
+	}
+
+	else if (t.name === "IBM X-Force") {
+	  t.url = isIP
+		? `https://exchange.xforce.ibmcloud.com/ip/${cleaned}`
+		: `https://exchange.xforce.ibmcloud.com/url/${cleaned}`;
+	}
+	
+	else if (t.name === "Threat Miner") {
+	  t.url = isIP
+		? `https://www.threatminer.org/host.php?q=${cleaned}`
+		: `https://www.threatminer.org/domain.php?q=${cleaned}`;
+	}
+	
+	else if (t.template) {
+	  t.url = t.originalUrl.replaceAll('{{query}}', finalQuery);
+	}
+	
+	else 
+	{
+	  t.url = t.originalUrl + finalQuery;
+	}
   });
 
   renderAll(document.getElementById('filter').value.trim().toLowerCase());
