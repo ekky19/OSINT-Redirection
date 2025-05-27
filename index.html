@@ -288,8 +288,12 @@
    
     { name: 'Web Check', url:'https://web-check.xyz/check/', desc:'All-in-one OSINT website analyzer'},
     
+	{ name: 'Tor Metrics', url:'https://metrics.torproject.org/rs.html#search/', desc:'Tor Metrics'},	
+	
 	{ name: 'IntelX', url:'https://intelx.io/?s=', desc:'Enter a domain, URL, Email, IP, CIDR, Bitcoin address, and more'},
     
+	{ name: 'Host IO', url:'https://host.io/', desc:'Host IO'},
+	
 	{ name: 'URL Scan', url:'https://urlscan.io/search/#', desc:'Search for domains, IPs, filenames, hashes, ASNs'},
 	
 	{ name: 'Silent Push', url:'https://explore.silentpush.com/enrichment/domain/', desc:'Search for domains, IPs, AS Number'},
@@ -357,8 +361,8 @@
 	  template: 'https://dnsdumpster.com/?target={{query}}&user=free',
 	  desc: 'Passive DNS and domain mapping tool'
 	},
-
-    {
+	
+	{
 	  name: 'Similar Web',
 	  template: 'https://www.similarweb.com/website/{{query}}/#overview',
 	  desc: 'Website traffic and ranking data'
@@ -457,7 +461,9 @@
 	
 	{ name:'Malshare', url:'https://malshare.com/sample.php?action=detail&hash=', desc:'Recently added Samples Hash'},
 	
-    { name:'Jotti', url:'https://virusscan.jotti.org/en-US/search/hash/', desc:'#Hash'}
+	{ name:'Alienvault', url:'https://otx.alienvault.com/indicator/file/', desc:'Hash'},
+		
+	{ name:'Jotti', url:'https://virusscan.jotti.org/en-US/search/hash/', desc:'#Hash'}
   ],
   "EMAIL": [
     { name:'Email Hunter', url:'https://hunter.io/search/', desc:'Email Hunter'},
@@ -498,6 +504,9 @@
 	
     { name:'JoeSandbox', url:'https://www.joesandbox.com/', desc:'Sandbox - Deep Malware Analysis', skipSearch: true},
 	
+	{ name:'Zscaler Zulu', url:'https://zulu.zscaler.com/', desc:'Zulu URL Risk Analyzer', skipSearch: true},	
+	
+	{ name:'Extract Links', url:'https://hackertarget.com/extract-links/', desc:'Extract Links from Page', skipSearch: true},	
     
     { name:'CyberChef', url:'https://gchq.github.io/CyberChef/', desc:'CyberChef', skipSearch: true},
 	
@@ -529,7 +538,7 @@
 	
     { name:'OSINT Framework', url:'https://osintframework.com/', desc:'Osint Framework', skipSearch: true},
 	
-    { name:'DNS Info', url:'https://viewdns.info/', desc:'', skipSearch: true},
+    { name:'DNS Info', url:'https://viewdns.info/', desc:'DNS Info', skipSearch: true},
 	
     { name:'Google Advanced', url:'https://www.google.com/advanced_search', desc:'Google Advanced Search', skipSearch: true},
 	
@@ -557,7 +566,7 @@
 	}
   ],
   "NEWS": [
-	  { name: "The Dfir Report", url: "https://thedfirreport.com/", desc: "DFIR writeups and attack reports", skipSearch: true },
+	  { name: "Dfir Report", url: "https://thedfirreport.com/", desc: "DFIR writeups and attack reports", skipSearch: true },
 	  
 	  { name: "Week In OSINT", url: "https://sector035.nl/articles/category:week-in-osint", desc: "Weekly OSINT roundup" , skipSearch: true},
 	  
@@ -577,7 +586,7 @@
 	 
  	  { name: "Darkreading", url: "https://www.darkreading.com/", desc: "Darkreading news" , skipSearch: true},
 	  
-	  { name: "Infosecurity Magazine", url: "https://www.infosecurity-magazine.com", desc: "Security news magazine" , skipSearch: true},
+	  { name: "Infosecurity", url: "https://www.infosecurity-magazine.com", desc: "Security news magazine" , skipSearch: true},
 	  
 	  { name: "Techurls", url: "https://techurls.com/", desc: "Tech Urls by Browserling" , skipSearch: true},	   
 	   
@@ -643,13 +652,22 @@
       const section = document.createElement('div'); section.className = 'section';
       section.innerHTML = `<h2>${title}</h2><div class="grid"></div>`;
       const grid = section.querySelector('.grid');
-      items.forEach(tool => {
-        const card = document.createElement('div'); card.className = 'card';
-        const link = document.createElement('a'); link.textContent = tool.name;
-        link.href = tool.url; link.target = '_blank';
-        const tip = document.createElement('div'); tip.className = 'tooltip'; tip.textContent = tool.desc;
-        card.append(link, tip);
-        grid.append(card);
+      items.forEach(tool => 
+	  {
+        const card = document.createElement('div'); 
+  card.className = 'card';
+
+  const link = document.createElement('a'); 
+  link.textContent = tool.skipSearch ? `🔶 ${tool.name}` : tool.name;
+  link.href = tool.url; 
+  link.target = '_blank';
+
+  const tip = document.createElement('div'); 
+  tip.className = 'tooltip'; 
+  tip.textContent = tool.desc;
+
+  card.append(link, tip);
+  grid.append(card);
       });
 	  
 	  // ✅ Enable drag-and-drop only on desktop/tablet (not mobile)
