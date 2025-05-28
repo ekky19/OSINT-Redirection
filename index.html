@@ -235,12 +235,55 @@
 	[data-theme="dark"] .tooltip {
 		color: black; 
 	}
+	
+	/* Style the arrow button*/
+	.favorites-header {
+	  display: flex;
+	  align-items: center;
+	  gap: 0.5rem;
+	  line-height: 1;
+	}
+
+	.favorites-launch {
+	  cursor: pointer;
+	  font-size: 2.6rem; // the size of the arrow icon
+	  transition: color 0.3s;
+	  vertical-align: middle;
+	  line-height: 1;
+	  margin-top: -4px; /* ✅ Tweak this for perfect alignment, the location of he arrow */
+	  position: relative; 
+	  top: -4px;
+  
+}
+
+.favorites-launch:hover {
+  color: var(--primary);
+}
+
 
   </style>
 </head>
 
 <body data-theme="dark">
-  <header>
+
+<div id="toast-warning" style="
+  display: none;
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  padding: 1rem 1.25rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  font-size: 0.95rem;
+  z-index: 9999;
+">
+  ⚠️ <strong>Oops!</strong> Please enter a valid IP, URL, or hash.
+</div>
+
+<header>
   
 <div class="dashboard-title-wrapper">
   <h1 class="dashboard-title">OSINT Dashboard</h1>
@@ -255,7 +298,9 @@
      • Changes are saved automatically in your browser (locally).<br><br>
 	 • Use the Filter bar below to quickly narrow down tools by name or purpose (e.g., “threat”, “email”, “dns”).<br>
      • Double-click the filter to reset it.<br>
-	 • Tools marked with 🔶 work standalone and do not reflect search queries from the dashboard.
+	 • Tools marked with 🔶 work standalone and do not reflect search queries from the dashboard.<br>
+	 •To reset the layout, open your browser console and run: 	 
+	 <pre><code>localStorage.removeItem("osintToolOrder");</code></pre>
   </div>
 </div>
 
@@ -282,10 +327,20 @@
       body.dataset.theme = body.dataset.theme === 'light' ? 'dark' : 'light';
     };
 
-   const categories = {
-  "SEARCH TOOLS": [
-    { name: 'Virus Total', url: 'https://www.virustotal.com/gui/search/', desc:'Analyse suspicious files, domains, IPs & URLs'},
-   
+   const categories = 
+   {
+	"YOUR FAVORITES": 
+	[
+		{ name: 'Virus Total', url: 'https://www.virustotal.com/gui/search/', desc:'Analyse suspicious files, domains, IPs & URLs'},
+		
+		{ name: 'URL Scan', url:'https://urlscan.io/search/#', desc:'Search for domains, IPs, filenames, hashes, ASNs'},
+		
+		{ name:'Shodan', url:'https://www.shodan.io/search?query=', desc:'Search Engine for the Internet of Everything'},
+	   
+		{ name:'Scamalytics', url:'https://scamalytics.com/ip/', desc:'IP Address Fraud Check'}	
+	],
+	"SEARCH TOOLS": [
+       
     { name: 'Web Check', url:'https://web-check.xyz/check/', desc:'All-in-one OSINT website analyzer'},
     
 	{ name: 'Tor Metrics', url:'https://metrics.torproject.org/rs.html#search/', desc:'Tor Metrics'},	
@@ -294,8 +349,7 @@
     
 	{ name: 'Host IO', url:'https://host.io/', desc:'Host IO'},
 	
-	{ name: 'URL Scan', url:'https://urlscan.io/search/#', desc:'Search for domains, IPs, filenames, hashes, ASNs'},
-	
+		
 	{ name: 'Silent Push', url:'https://explore.silentpush.com/enrichment/domain/', desc:'Search for domains, IPs, AS Number'},
 	
 	{ name: 'Live Scan', url:'https://explore.silentpush.com/live-scan?url=', desc:'Silent Push Live Scan'},
@@ -313,8 +367,6 @@
     { name: 'Abuse IP DB', url:'https://www.abuseipdb.com/check/', desc:'Check the report history of any IP address to see if anyone else has reported malicious activities.'},
     
 	{ name: 'Censys', url:'https://search.censys.io/search?resource=hosts&sort=RELEVANCE&per_page=25&virtual_hosts=EXCLUDE&q=', desc:'Search an IP address, name, protocol or field: value'},
-	
-    { name:'Shodan', url:'https://www.shodan.io/search?query=', desc:'Search Engine for the Internet of Everything'},
 	
     { name:'Netcraft', url:'https://searchdns.netcraft.com/?restriction=site+contains&host=', desc:'Domain tech info'},
 	
@@ -372,9 +424,7 @@
   "IP INFO": [
     { name:'Criminal IP', url:'https://www.criminalip.io/en/asset/search?query=', desc:'Criminal IP is an OSINT search engine specialized in attack surface assessment and threat hunting.'},
 	
-	{ name:'Spur', url:'https://spur.us/context/', desc:'Detect VPNs, Residential proxies, and Bots'},
-	
-    { name:'Scamalytics', url:'https://scamalytics.com/ip/', desc:'IP Address Fraud Check'},
+	{ name:'Spur', url:'https://spur.us/context/', desc:'Detect VPNs, Residential proxies, and Bots'},    
 	
     { name:'IP Void', url:'https://www.ipvoid.com/scan/', desc:'IP Address Information'},
     { name:'IP to Hostname', url:'https://dnschecker.org/ip-to-hostname.php?query=', desc:'IP to Hostname Lookup'},
@@ -544,12 +594,62 @@
 	
 	{ name:'Web Page to PDF', url:'https://www.ipvoid.com/webpage-to-pdf/', desc:'Convert Web Page to PDF', skipSearch: true},
 	
-	{ name:'Domain Age Checker', url:'https://www.ipvoid.com/domain-age-checker/', desc:'Domain age checker', skipSearch: true},
-		
-    { name:'WhatsMyName', url:'https://whatsmyname.app/', desc:'Search usernames', skipSearch: true}
-	
-	
+	{ name:'Domain Age Checker', url:'https://www.ipvoid.com/domain-age-checker/', desc:'Domain age checker', skipSearch: true}	
   ],
+  "DARK WEB": [
+	  { name: 'Ahmia', url: 'https://ahmia.fi/', desc: 'Search engine for .onion sites on the Tor network', skipSearch: true },
+	  { name: 'Onion Engine', url: 'https://onionengine.com/', desc: 'Dark web search engine and link index', skipSearch: true },
+	  { name: 'TelemetryApp', url: 'https://www.telemetryapp.io/', desc: 'Darknet intelligence and onion service scanner', skipSearch: true },
+	  { name: 'Library of Leaks', url: 'https://search.libraryofleaks.org/', desc: 'Search leaked documents and databases', skipSearch: true },
+	  { name: 'Onion.live', url: 'https://onion.live/', desc: 'Live list of Tor hidden services with status and categories', skipSearch: true },
+	  { name: 'Tor.link', url: 'https://tor.link/', desc: 'Directory of onion links', skipSearch: true },
+	  { name: 'The Hidden Wiki', url: 'https://thehiddenwiki.org/', desc: 'Uncensored hidden service index on the Tor network', skipSearch: true },
+	  { name: 'Aleph Open Search', url: 'https://open-search.aleph-networks.eu/', desc: 'Search engine for open and dark web sources', skipSearch: true }
+	],
+
+  "PRIVATE SEARCH ENGINES": [
+	  { name: 'Startpage', url: 'https://www.startpage.com/', desc: 'Private search engine that doesn’t track you', skipSearch: true },
+	  { name: 'DuckDuckGo', url: 'https://duckduckgo.com/', desc: 'Privacy-focused search engine with no tracking' , skipSearch: true},
+	  { name: 'Qwant', url: 'https://www.qwant.com/', desc: 'French search engine that respects your privacy' , skipSearch: true},
+	  { name: 'Search Encrypt', url: 'https://www.searchencrypt.com/home', desc: 'Encrypted search engine that protects your history' , skipSearch: true},
+	  { name: 'Gibiru', url: 'https://gibiru.com/', desc: 'Anonymous search engine for uncensored content' , skipSearch: true},
+	  { name: 'Ecosia', url: 'https://www.ecosia.org/', desc: 'Eco-friendly private search engine that plants trees' , skipSearch: true},
+	  { name: 'Swisscows', url: 'https://swisscows.com/en', desc: 'Swiss private search engine with semantic search' , skipSearch: true},
+	  { name: 'Mojeek', url: 'https://www.mojeek.com/', desc: 'Independent search engine with its own index' , skipSearch: true},
+	  { name: 'MetaGer', url: 'https://metager.org/', desc: 'Open-source, privacy-respecting metasearch engine' , skipSearch: true},
+	  { name: 'Disconnect Search', url: 'https://search.disconnect.me/', desc: 'Private search engine powered by major providers', skipSearch: true }
+	],
+  "AI TOOLS": [
+	  { name: 'ChatGPT', url: 'https://chatgpt.com/', desc: 'OpenAI’s powerful conversational AI', skipSearch: true },
+	  { name: 'Gemini', url: 'https://gemini.google.com/', desc: 'Google’s AI assistant powered by Bard', skipSearch: true },
+	  { name: 'Claude', url: 'https://claude.ai/', desc: 'Anthropic’s AI chatbot for research and productivity', skipSearch: true },
+	  { name: 'Copilot', url: 'https://copilot.microsoft.com/', desc: 'Microsoft’s AI companion across the web', skipSearch: true },
+	  { name: 'Perplexity', url: 'https://www.perplexity.ai/', desc: 'AI-powered answer engine for real-time research', skipSearch: true },
+	  { name: 'Consensus', url: 'https://consensus.app/', desc: 'AI tool to find scientific consensus from research papers', skipSearch: true },
+	  { name: 'Notion AI', url: 'https://www.notion.so/', desc: 'Notion’s AI assistant integrated into workspace tools', skipSearch: true }
+	],
+
+	"USERNAME & PEOPLE OSINT": [
+	  { name: 'NameChk', url: 'https://namechk.com', desc: 'Check username availability across social networks and domains', skipSearch: true },
+	  { name: 'WhatsMyName', url: 'https://whatsmyname.app', desc: 'Find usernames across 500+ websites', skipSearch: true },
+	  { name: 'NameCheckup', url: 'https://namecheckup.com', desc: 'Username and domain checker tool', skipSearch: true },
+	  { name: 'Whitepages', url: 'https://www.whitepages.com/', desc: 'US people search and contact info', skipSearch: true },
+	  { name: 'Spokeo', url: 'https://www.spokeo.com/', desc: 'People search engine using social networks, public records, and more', skipSearch: true },
+	  { name: 'ThatsThem', url: 'https://thatsthem.com/', desc: 'Free people search with phone, address, and email lookup', skipSearch: true },
+	  { name: 'VoterRecords', url: 'https://voterrecords.com/', desc: 'Public voter registration data', skipSearch: true },
+	  { name: 'TrueCaller', url: 'https://www.truecaller.com/', desc: 'Phone number lookup and spam call protection', skipSearch: true },
+	  { name: 'IntelX Facebook Tool', url: 'https://intelx.io/tools?tab=facebook', desc: 'Facebook search and discovery via IntelligenceX', skipSearch: true },
+	  { name: 'ImgInn', url: 'https://imginn.com/', desc: 'View Instagram profiles anonymously', skipSearch: true },
+	  { name: 'aiHitData', url: 'https://www.aihitdata.com/', desc: 'Track company and people changes across organizations', skipSearch: true }
+	],
+
+	"WEBSITE OSINT TOOLS": [
+	  { name: "VisualPing", url: "https://visualping.io/", desc: "Monitor website changes.", skipSearch: true },
+	  { name: "Backlink Watch", url: "https://www.backlinkwatch.com/index.php", desc: "Check who links back to a website.", skipSearch: true },
+	  { name: "Find Subdomains", url: "https://pentest-tools.com/information-gathering/find-subdomains-of-domain", desc: "Discover subdomains.", skipSearch: true },
+	  { name: "Wayback Machine", url: "https://web.archive.org/web/20250000000000*/", desc: "View historical snapshots of websites(archive)."}
+	],
+	
   "CODE SEARCH": [
     {name: "Grep",url: "https://grep.app/",desc: "Codes Search", skipSearch: true},
 	
@@ -679,54 +779,84 @@
     }
 
 	// ✅ Auto-fill and trigger ADD from URL ?ip=... or ?q=...
-	window.addEventListener('DOMContentLoaded', () => {
-	  const params = new URLSearchParams(window.location.search);
-	  const value = params.get('ip') || params.get('q'); // support ?ip= or ?q=
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  const value = params.get('ip') || params.get('q'); // support ?ip= or ?q=
 
-	  if (value) {
-		const input = document.getElementById('search');
-		input.value = value;
+  if (value) {
+    const input = document.getElementById('search');
+    input.value = value;
 
-		// Simulate submit
-		const fakeEvent = new Event('submit');
-		const form = document.querySelector('.search-bar');
-		form.dispatchEvent(fakeEvent);
-	  }
-	});
+    // Simulate submit
+    const fakeEvent = new Event('submit');
+    const form = document.querySelector('.search-bar');
+    form.dispatchEvent(fakeEvent);
+  }
+
+  // ✅ Step 4: Hook into renderAll to inject arrow after each render
+  if (typeof renderAll === 'function') {
+    const originalRenderAll = renderAll;
+    window.renderAll = function (...args) {
+      originalRenderAll.apply(this, args);
+      addArrowToFavorites(); // inject arrow after each render
+    };
+    addArrowToFavorites(); // run once on initial load
+  }
+});
+
 
 function saveOrderToLocalStorage() {
   const order = {};
+
   document.querySelectorAll('.section').forEach(section => {
     const category = section.querySelector('h2').textContent.trim();
-    const toolNames = Array.from(section.querySelectorAll('.card a')).map(a => a.textContent.trim());
+    const toolNames = Array.from(section.querySelectorAll('.card a')).map(a =>
+      a.textContent.trim().replace(/^🔶 /, '') // remove icon if present
+    );
     order[category] = toolNames;
   });
+
   localStorage.setItem('osintToolOrder', JSON.stringify(order));
 }
 
+
 	//  drag-and-drop Functions
 	function loadOrderFromLocalStorage() {
-	  try {
-		const saved = JSON.parse(localStorage.getItem('osintToolOrder'));
-		if (!saved) return categories;
+  try {
+    const saved = JSON.parse(localStorage.getItem('osintToolOrder'));
+    if (!saved) return categories;
 
-		const newCategories = {};
-		for (const [category, tools] of Object.entries(saved)) {
-		  const original = categories[category] || [];
-		  newCategories[category] = tools
-			.map(name => original.find(t => t.name === name))
-			.filter(Boolean);
+    const newCategories = {};
 
-		  // Add back any tools not found (maybe added later)
-		  const leftovers = original.filter(t => !tools.includes(t.name));
-		  newCategories[category] = [...newCategories[category], ...leftovers];
-		}
+    // Flatten all tools and build a lookup map by tool name
+    const allTools = Object.values(categories).flat();
+    const toolMap = allTools.reduce((acc, tool) => {
+      acc[tool.name] = tool;
+      return acc;
+    }, {});
 
-		return newCategories;
-	  } catch (e) {
-		return categories;
-	  }
-	}
+    // Reassign tools to categories based on saved order
+    for (const [category, toolNames] of Object.entries(saved)) {
+      newCategories[category] = toolNames.map(name => toolMap[name]).filter(Boolean);
+    }
+
+    // Add back any tools that weren't saved (e.g. newly added later)
+    const usedTools = new Set(Object.values(newCategories).flat().map(t => t.name));
+    for (const [category, tools] of Object.entries(categories)) {
+      const extras = tools.filter(t => !usedTools.has(t.name));
+      if (!newCategories[category]) {
+        newCategories[category] = extras;
+      } else {
+        newCategories[category].push(...extras);
+      }
+    }
+
+    return newCategories;
+  } catch (e) {
+    return categories;
+  }
+}
+
 
 	  
     function renderAll(filter = '') {
@@ -762,6 +892,27 @@ function replaceSpecialCharacters(str) {
 function sanitizeInput(str) {
   return str.replace(/^https?:\/\//, '').replace(/\/$/, '');
 }
+
+// Inject arrow element near the YOUR FAVORITES heading
+function addArrowToFavorites() {
+  const headers = document.querySelectorAll('.section h2');
+  headers.forEach(header => {
+    if (header.textContent.trim() === 'YOUR FAVORITES' && !header.parentElement.querySelector('.favorites-launch')) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'favorites-header';
+
+      const arrow = document.createElement('span');
+      arrow.className = 'favorites-launch';
+      arrow.title = 'Open all YOUR FAVORITES tools';
+      arrow.innerText = '↗️';
+      arrow.onclick = openFavorites;
+
+      wrapper.append(header.cloneNode(true), arrow);
+      header.replaceWith(wrapper);
+    }
+  });
+}
+
 
 function updateLinks(e) {
   e.preventDefault();
@@ -834,6 +985,12 @@ function updateLinks(e) {
 		: `https://www.threatminer.org/domain.php?q=${cleaned}`;
 	}
 	
+	else if (t.name === "Fortiguard") {
+	  t.url = isIP
+		? "https://www.fortiguard.com/threatintel-search"
+		: t.originalUrl.replaceAll('{{query}}', finalQuery);
+	}
+	
 	else if (t.template) {
 	  t.url = t.originalUrl.replaceAll('{{query}}', finalQuery);
 	}
@@ -851,7 +1008,70 @@ function updateLinks(e) {
     addButton.style.backgroundColor = '';
   }, 500);
 }
-	renderAll();
+	
+renderAll();
+//Create input validation 
+function validateInput(input) {
+  if (!input.trim()) {
+    showToastWarning("Please enter a valid IP, URL, or hash.");
+    return false;
+  }
+  return true;
+}
+
+function showToastWarning(message) {
+  const toast = document.getElementById('toast-warning');
+  toast.innerHTML = `⚠️ <strong>Oops!</strong> ${message}`;
+  toast.style.display = 'block';
+  setTimeout(() => {
+    toast.style.display = 'none';
+  }, 3000);
+}
+
+// multi-site opener
+function openFavorites() {
+  const input = document.getElementById('search').value.trim();
+  if (!validateInput(input)) return;
+
+  const headers = document.querySelectorAll('.section h2');
+  let section = null;
+
+  headers.forEach(h => {
+    if (h.textContent.trim() === 'YOUR FAVORITES') {
+      section = h.closest('.section');
+    }
+  });
+
+  if (!section) return;
+
+  const links = section.querySelectorAll('.card a');
+
+  const allTools = Object.values(categories || {}).flat();
+
+  const encodedInput = encodeURIComponent(input);
+
+  for (const a of links) {
+    const href = a.getAttribute('href');
+    const matchedTool = allTools.find(tool =>
+      href.startsWith(tool.url) || href.startsWith(tool.originalUrl || "")
+    );
+
+    if (matchedTool?.skipSearch) continue;
+
+    // 🔁 Build the final URL (handle templates too)
+    let finalUrl = matchedTool?.template
+      ? matchedTool.template.replace('{{query}}', encodedInput)
+      : href;
+
+    // ✅ Synchronously open the tab (as part of user gesture)
+    const newTab = window.open(finalUrl, '_blank');
+
+    if (!newTab) {
+      showToastWarning("⚠️ Your browser blocked one or more pop-ups. Please allow pop-ups for this site.");
+      break; // Avoid spamming more tabs if blocked
+    }
+  }
+}
   </script>	 
 <footer style="margin-top: 3rem; text-align: center; font-size: 0.95rem; padding: 1rem 0; border-top: 1px solid var(--muted); color: var(--muted); transition: all 0.3s ease;">
   🛡️ Made for defenders, by 
