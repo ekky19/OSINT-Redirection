@@ -596,16 +596,6 @@
 	
 	{ name:'Domain Age Checker', url:'https://www.ipvoid.com/domain-age-checker/', desc:'Domain age checker', skipSearch: true}	
   ],
-  "DARK WEB": [
-	  { name: 'Ahmia', url: 'https://ahmia.fi/', desc: 'Search engine for .onion sites on the Tor network', skipSearch: true },
-	  { name: 'Onion Engine', url: 'https://onionengine.com/', desc: 'Dark web search engine and link index', skipSearch: true },
-	  { name: 'TelemetryApp', url: 'https://www.telemetryapp.io/', desc: 'Darknet intelligence and onion service scanner', skipSearch: true },
-	  { name: 'Library of Leaks', url: 'https://search.libraryofleaks.org/', desc: 'Search leaked documents and databases', skipSearch: true },
-	  { name: 'Onion.live', url: 'https://onion.live/', desc: 'Live list of Tor hidden services with status and categories', skipSearch: true },
-	  { name: 'Tor.link', url: 'https://tor.link/', desc: 'Directory of onion links', skipSearch: true },
-	  { name: 'The Hidden Wiki', url: 'https://thehiddenwiki.org/', desc: 'Uncensored hidden service index on the Tor network', skipSearch: true },
-	  { name: 'Aleph Open Search', url: 'https://open-search.aleph-networks.eu/', desc: 'Search engine for open and dark web sources', skipSearch: true }
-	],
 
   "PRIVATE SEARCH ENGINES": [
 	  { name: 'Startpage', url: 'https://www.startpage.com/', desc: 'Private search engine that doesn’t track you', skipSearch: true },
@@ -857,7 +847,15 @@ function saveOrderToLocalStorage() {
   }
 }
 
+	// ✅ Versioning control for localStorage layout, so change v3,v4,v5... each time when update github
+	const toolConfigVersion = "v2"; // Change this version string with each new update
+	const storedVersion = localStorage.getItem("toolConfigVersion");
 
+	if (storedVersion !== toolConfigVersion) {
+	  console.log("Detected new tool config version. Resetting layout.");
+	  localStorage.removeItem("osintToolOrder");
+	  localStorage.setItem("toolConfigVersion", toolConfigVersion);
+	}
 	  
     function renderAll(filter = '') {
       const container = document.getElementById('content');
@@ -1072,6 +1070,7 @@ function openFavorites() {
     }
   }
 }
+
   </script>	 
 <footer style="margin-top: 3rem; text-align: center; font-size: 0.95rem; padding: 1rem 0; border-top: 1px solid var(--muted); color: var(--muted); transition: all 0.3s ease;">
   🛡️ Made for defenders, by 
