@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "OSINT Favorites Trigger",
+  "version": "1.1",
+  "description": "Triggers OSINT favorites directly from the site using selected text.",
+  "permissions": [
+    "contextMenus",
+    "tabs",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://ekky19.github.io/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://ekky19.github.io/osint/*"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ],
+  "action": {
+    "default_title": "OSINT Favorites Trigger"
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  }
+}
