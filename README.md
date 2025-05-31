@@ -82,6 +82,9 @@ This lightweight Chrome extension allows you to right-click any IP, domain, URL,
 
 5. ✅ Done! Right-click on any selected IP, URL, or hash → `OSINT Dashboard`
 
+Note: The difference between OSINT Favorites - Chrome extension and the original plugin is that this version also automatically triggers all the links under **"YOUR FAVORITES"** in the OSINT Dashboard.
+
+
 ---
 ## 👨‍💻 Credits
 
