@@ -92,6 +92,19 @@ Note: The difference between OSINT Favorites - Chrome extension and the original
 
 ---
 
-## 📜 License
+## 🛡 License
 
-MIT License
+This project is licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** license.
+
+You are free to:
+- Share — copy and redistribute the material
+- Adapt — remix, transform, and build upon the material
+
+**Under the following terms:**
+- Attribution — You must give appropriate credit
+- NonCommercial — You may not use the material for commercial purposes without explicit permission from the author
+
+For commercial use, please contact me for licensing inquiries.
+
+🔗 [View Full License](https://creativecommons.org/licenses/by-nc/4.0/)
+
