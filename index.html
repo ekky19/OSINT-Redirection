@@ -327,6 +327,16 @@
       body.dataset.theme = body.dataset.theme === 'light' ? 'dark' : 'light';
     };
 
+// ✅ Versioning control for localStorage layout, so change v3,v4,v5... each time when update github
+	const toolConfigVersion = "v2"; // Change this version string with each new update
+	const storedVersion = localStorage.getItem("toolConfigVersion");
+
+	if (storedVersion !== toolConfigVersion) {
+	  console.log("Detected new tool config version. Resetting layout.");
+	  localStorage.removeItem("osintToolOrder");
+	  localStorage.setItem("toolConfigVersion", toolConfigVersion);
+	}
+	
    const categories = 
    {
 	"YOUR FAVORITES": 
@@ -596,19 +606,7 @@
 	
 	{ name:'Domain Age Checker', url:'https://www.ipvoid.com/domain-age-checker/', desc:'Domain age checker', skipSearch: true}	
   ],
-
-  "PRIVATE SEARCH ENGINES": [
-	  { name: 'Startpage', url: 'https://www.startpage.com/', desc: 'Private search engine that doesn’t track you', skipSearch: true },
-	  { name: 'DuckDuckGo', url: 'https://duckduckgo.com/', desc: 'Privacy-focused search engine with no tracking' , skipSearch: true},
-	  { name: 'Qwant', url: 'https://www.qwant.com/', desc: 'French search engine that respects your privacy' , skipSearch: true},
-	  { name: 'Search Encrypt', url: 'https://www.searchencrypt.com/home', desc: 'Encrypted search engine that protects your history' , skipSearch: true},
-	  { name: 'Gibiru', url: 'https://gibiru.com/', desc: 'Anonymous search engine for uncensored content' , skipSearch: true},
-	  { name: 'Ecosia', url: 'https://www.ecosia.org/', desc: 'Eco-friendly private search engine that plants trees' , skipSearch: true},
-	  { name: 'Swisscows', url: 'https://swisscows.com/en', desc: 'Swiss private search engine with semantic search' , skipSearch: true},
-	  { name: 'Mojeek', url: 'https://www.mojeek.com/', desc: 'Independent search engine with its own index' , skipSearch: true},
-	  { name: 'MetaGer', url: 'https://metager.org/', desc: 'Open-source, privacy-respecting metasearch engine' , skipSearch: true},
-	  { name: 'Disconnect Search', url: 'https://search.disconnect.me/', desc: 'Private search engine powered by major providers', skipSearch: true }
-	],
+	
   "AI TOOLS": [
 	  { name: 'ChatGPT', url: 'https://chatgpt.com/', desc: 'OpenAI’s powerful conversational AI', skipSearch: true },
 	  { name: 'Gemini', url: 'https://gemini.google.com/', desc: 'Google’s AI assistant powered by Bard', skipSearch: true },
@@ -638,6 +636,19 @@
 	  { name: "Backlink Watch", url: "https://www.backlinkwatch.com/index.php", desc: "Check who links back to a website.", skipSearch: true },
 	  { name: "Find Subdomains", url: "https://pentest-tools.com/information-gathering/find-subdomains-of-domain", desc: "Discover subdomains.", skipSearch: true },
 	  { name: "Wayback Machine", url: "https://web.archive.org/web/20250000000000*/", desc: "View historical snapshots of websites(archive)."}
+	],
+	
+	"PRIVATE SEARCH ENGINES": [
+	  { name: 'Startpage', url: 'https://www.startpage.com/', desc: 'Private search engine that doesn’t track you', skipSearch: true },
+	  { name: 'DuckDuckGo', url: 'https://duckduckgo.com/', desc: 'Privacy-focused search engine with no tracking' , skipSearch: true},
+	  { name: 'Qwant', url: 'https://www.qwant.com/', desc: 'French search engine that respects your privacy' , skipSearch: true},
+	  { name: 'Search Encrypt', url: 'https://www.searchencrypt.com/home', desc: 'Encrypted search engine that protects your history' , skipSearch: true},
+	  { name: 'Gibiru', url: 'https://gibiru.com/', desc: 'Anonymous search engine for uncensored content' , skipSearch: true},
+	  { name: 'Ecosia', url: 'https://www.ecosia.org/', desc: 'Eco-friendly private search engine that plants trees' , skipSearch: true},
+	  { name: 'Swisscows', url: 'https://swisscows.com/en', desc: 'Swiss private search engine with semantic search' , skipSearch: true},
+	  { name: 'Mojeek', url: 'https://www.mojeek.com/', desc: 'Independent search engine with its own index' , skipSearch: true},
+	  { name: 'MetaGer', url: 'https://metager.org/', desc: 'Open-source, privacy-respecting metasearch engine' , skipSearch: true},
+	  { name: 'Disconnect Search', url: 'https://search.disconnect.me/', desc: 'Private search engine powered by major providers', skipSearch: true }
 	],
 	
   "CODE SEARCH": [
@@ -724,38 +735,39 @@
 		desc: "Project RULER: Remote execution references" , skipSearch: true
 	  }
 	]
-
-
 };
 	
-	function replaceSpecialCharacters(str) {
+	function replaceSpecialCharacters(str) 
+	{
 		return str.replaceAll("/", "%252F").replaceAll(":", "%253A");
 	}
 
-    function renderCategory(title, items) {
+    function renderCategory(title, items) 
+	{
       const section = document.createElement('div'); section.className = 'section';
       section.innerHTML = `<h2>${title}</h2><div class="grid"></div>`;
       const grid = section.querySelector('.grid');
       items.forEach(tool => 
 	  {
-        const card = document.createElement('div'); 
-  card.className = 'card';
+          const card = document.createElement('div'); 
+		  card.className = 'card';
 
-  const link = document.createElement('a'); 
-  link.textContent = tool.skipSearch ? `🔶 ${tool.name}` : tool.name;
-  link.href = tool.url; 
-  link.target = '_blank';
+		  const link = document.createElement('a'); 
+		  link.textContent = tool.skipSearch ? `🔶 ${tool.name}` : tool.name;
+		  link.href = tool.url; 
+		  link.target = '_blank';
 
-  const tip = document.createElement('div'); 
-  tip.className = 'tooltip'; 
-  tip.textContent = tool.desc;
+		  const tip = document.createElement('div'); 
+		  tip.className = 'tooltip'; 
+		  tip.textContent = tool.desc;
 
-  card.append(link, tip);
-  grid.append(card);
-      });
+		  card.append(link, tip);
+		  grid.append(card);
+	  });
 	  
 	  // ✅ Enable drag-and-drop only on desktop/tablet (not mobile)
-		if (window.innerWidth > 768) {
+		if (window.innerWidth > 768) 
+		{
 		  Sortable.create(grid, {
 			group: 'shared',
 			animation: 150,
@@ -763,8 +775,6 @@
 			onEnd: saveOrderToLocalStorage
 		  });
 		}
-
-
       return section;
     }
 
@@ -773,7 +783,8 @@ window.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search);
   const value = params.get('ip') || params.get('q'); // support ?ip= or ?q=
 
-  if (value) {
+  if (value) 
+  {
     const input = document.getElementById('search');
     input.value = value;
 
@@ -784,7 +795,8 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   // ✅ Step 4: Hook into renderAll to inject arrow after each render
-  if (typeof renderAll === 'function') {
+  if (typeof renderAll === 'function') 
+  {
     const originalRenderAll = renderAll;
     window.renderAll = function (...args) {
       originalRenderAll.apply(this, args);
@@ -795,7 +807,8 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 
-function saveOrderToLocalStorage() {
+function saveOrderToLocalStorage() 
+{
   const order = {};
 
   document.querySelectorAll('.section').forEach(section => {
@@ -809,55 +822,53 @@ function saveOrderToLocalStorage() {
   localStorage.setItem('osintToolOrder', JSON.stringify(order));
 }
 
-
 	//  drag-and-drop Functions
-	function loadOrderFromLocalStorage() {
-  try {
-    const saved = JSON.parse(localStorage.getItem('osintToolOrder'));
-    if (!saved) return categories;
+	function loadOrderFromLocalStorage() 
+	{
+	  try 
+	  {
+		const saved = JSON.parse(localStorage.getItem('osintToolOrder'));
+		if (!saved) return categories;
 
-    const newCategories = {};
+		const newCategories = {};
 
-    // Flatten all tools and build a lookup map by tool name
-    const allTools = Object.values(categories).flat();
-    const toolMap = allTools.reduce((acc, tool) => {
-      acc[tool.name] = tool;
-      return acc;
-    }, {});
+		// Flatten all tools and build a lookup map by tool name
+		const allTools = Object.values(categories).flat();
+		const toolMap = allTools.reduce((acc, tool) => {
+		  acc[tool.name] = tool;
+		  return acc;
+		}, {});
 
-    // Reassign tools to categories based on saved order
-    for (const [category, toolNames] of Object.entries(saved)) {
-      newCategories[category] = toolNames.map(name => toolMap[name]).filter(Boolean);
-    }
+		// Reassign tools to categories based on saved order
+		for (const [category, toolNames] of Object.entries(saved)) 
+		{
+		  newCategories[category] = toolNames.map(name => toolMap[name]).filter(Boolean);
+		}
 
-    // Add back any tools that weren't saved (e.g. newly added later)
-    const usedTools = new Set(Object.values(newCategories).flat().map(t => t.name));
-    for (const [category, tools] of Object.entries(categories)) {
-      const extras = tools.filter(t => !usedTools.has(t.name));
-      if (!newCategories[category]) {
-        newCategories[category] = extras;
-      } else {
-        newCategories[category].push(...extras);
-      }
-    }
+		// Add back any tools that weren't saved (e.g. newly added later)
+		const usedTools = new Set(Object.values(newCategories).flat().map(t => t.name));
+		for (const [category, tools] of Object.entries(categories)) {
+		  const extras = tools.filter(t => !usedTools.has(t.name));
+		  if (!newCategories[category]) 
+		  {
+			newCategories[category] = extras;
+		  } 
+		  else 
+		  {
+			newCategories[category].push(...extras);
+		  }
+		}
 
-    return newCategories;
-  } catch (e) {
-    return categories;
-  }
-}
-
-	// ✅ Versioning control for localStorage layout, so change v3,v4,v5... each time when update github
-	const toolConfigVersion = "v2"; // Change this version string with each new update
-	const storedVersion = localStorage.getItem("toolConfigVersion");
-
-	if (storedVersion !== toolConfigVersion) {
-	  console.log("Detected new tool config version. Resetting layout.");
-	  localStorage.removeItem("osintToolOrder");
-	  localStorage.setItem("toolConfigVersion", toolConfigVersion);
-	}
+		return newCategories;
+	  } 
+	  catch (e) 
+	  {
+		return categories;
+	  }
+}	
 	  
-    function renderAll(filter = '') {
+    function renderAll(filter = '') 
+	{
       const container = document.getElementById('content');
 	  container.innerHTML = '';
 	  const orderedCategories = loadOrderFromLocalStorage();
@@ -871,7 +882,8 @@ function saveOrderToLocalStorage() {
 	  });
     }
 
-    document.getElementById('filter').addEventListener('input', e => {
+    document.getElementById('filter').addEventListener('input', e => 
+	{
       renderAll(e.target.value.trim().toLowerCase());
     });
 	
@@ -882,17 +894,20 @@ function saveOrderToLocalStorage() {
 	});
 
 
-function replaceSpecialCharacters(str) {
+function replaceSpecialCharacters(str) 
+{
   // Single-level encoding for VirusTotal (avoid %25 double encoding)
   return str.replaceAll("/", "%2F").replaceAll(":", "%3A");
 }
 
-function sanitizeInput(str) {
+function sanitizeInput(str) 
+{
   return str.replace(/^https?:\/\//, '').replace(/\/$/, '');
 }
 
 // Inject arrow element near the YOUR FAVORITES heading
-function addArrowToFavorites() {
+function addArrowToFavorites() 
+{
   const headers = document.querySelectorAll('.section h2');
   headers.forEach(header => {
     if (header.textContent.trim() === 'YOUR FAVORITES' && !header.parentElement.querySelector('.favorites-launch')) {
@@ -912,7 +927,8 @@ function addArrowToFavorites() {
 }
 
 
-function updateLinks(e) {
+function updateLinks(e) 
+{
   e.preventDefault();
 
   const searchInput = document.getElementById('search');
@@ -1009,7 +1025,8 @@ function updateLinks(e) {
 	
 renderAll();
 //Create input validation 
-function validateInput(input) {
+function validateInput(input)
+{
   if (!input.trim()) {
     showToastWarning("Please enter a valid IP, URL, or hash.");
     return false;
@@ -1017,7 +1034,8 @@ function validateInput(input) {
   return true;
 }
 
-function showToastWarning(message) {
+function showToastWarning(message) 
+{
   const toast = document.getElementById('toast-warning');
   toast.innerHTML = `⚠️ <strong>Oops!</strong> ${message}`;
   toast.style.display = 'block';
@@ -1027,46 +1045,56 @@ function showToastWarning(message) {
 }
 
 // multi-site opener
-function openFavorites() {
-  const input = document.getElementById('search').value.trim();
+function openFavorites() 
+{
+  const input = document.getElementById('search')?.value.trim();
   if (!validateInput(input)) return;
 
   const headers = document.querySelectorAll('.section h2');
   let section = null;
 
   headers.forEach(h => {
-    if (h.textContent.trim() === 'YOUR FAVORITES') {
+    if (h.textContent.trim() === 'YOUR FAVORITES') 
+	{
       section = h.closest('.section');
     }
   });
 
-  if (!section) return;
+  if (!section) 
+  {
+    showToastWarning("❗ Could not locate YOUR FAVORITES section.");
+    return;
+  }
 
-  const links = section.querySelectorAll('.card a');
+  const cards = section.querySelectorAll('.card');
+  if (cards.length === 0) 
+  {
+    showToastWarning("Your FAVORITES list is empty.");
+    return;
+  }
 
   const allTools = Object.values(categories || {}).flat();
-
   const encodedInput = encodeURIComponent(input);
 
-  for (const a of links) {
-    const href = a.getAttribute('href');
-    const matchedTool = allTools.find(tool =>
-      href.startsWith(tool.url) || href.startsWith(tool.originalUrl || "")
-    );
+  for (const card of cards) 
+  {
+    const name = card.querySelector('a')?.textContent.trim();
+    if (!name) continue;
 
-    if (matchedTool?.skipSearch) continue;
+    const matchedTool = allTools.find(t => t.name === name);
+    if (!matchedTool || matchedTool.skipSearch) continue;
 
-    // 🔁 Build the final URL (handle templates too)
-    let finalUrl = matchedTool?.template
+    const finalUrl = matchedTool.template
       ? matchedTool.template.replace('{{query}}', encodedInput)
-      : href;
+      : matchedTool.url.endsWith('=') || matchedTool.url.endsWith('/')
+        ? matchedTool.url + encodedInput
+        : matchedTool.url;
 
-    // ✅ Synchronously open the tab (as part of user gesture)
     const newTab = window.open(finalUrl, '_blank');
-
-    if (!newTab) {
+    if (!newTab) 
+	{
       showToastWarning("⚠️ Your browser blocked one or more pop-ups. Please allow pop-ups for this site.");
-      break; // Avoid spamming more tabs if blocked
+      break;
     }
   }
 }
