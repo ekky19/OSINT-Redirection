@@ -49,7 +49,40 @@ If you add a new tool or category and it doesn't show up:
 3. Refresh the page (`Ctrl+Shift+R`)
 
 ---
+# 🧩 OSINT Dashboard Plugin (Chrome Extension)
 
+This lightweight Chrome extension allows you to right-click any IP, domain, URL, or hash on a webpage and instantly open it in the [OSINT Dashboard](https://ekky19.github.io/osint) for further investigation.
+
+---
+
+## 🚀 Features
+
+- 🔎 Right-click selected text and open it in the OSINT Dashboard
+- ⚡ Fast and simple — no setup required
+- 🌐 Supports IPs, domains, hashes, and URLs
+- 🛡 Works entirely client-side (no data collection)
+
+---
+
+## 🛠 Installation (Manual)
+
+> This extension is not yet published in the Chrome Web Store. To use it locally:
+
+1. **Download or clone** this repo
+
+2. Open Chrome and go to  
+   `chrome://extensions/`
+
+3. Enable **Developer mode** (top-right corner)
+
+4. Click **"Load unpacked"** and select the folder containing:
+   - `manifest.json`
+   - `background.js`
+   - `icon.png`
+
+5. ✅ Done! Right-click on any selected IP, URL, or hash → `OSINT Dashboard`
+
+---
 ## 👨‍💻 Credits
 
 🛡️ Made for defenders, by [Ekrem O.](https://www.linkedin.com/in/ekremozdemir19/)
