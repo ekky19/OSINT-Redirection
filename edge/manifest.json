@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "OSINT Dashboard",
+  "description": "Select any IP, URL, domain or hash, right-click, and send it to OSINT Dashboard for instant analysis.",
+  "version": "1.0",
+  "permissions": ["contextMenus", "activeTab", "scripting"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icon.png"
+  }
+}
