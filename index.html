@@ -328,7 +328,7 @@
     };
 
 // ✅ Versioning control for localStorage layout, so change v3,v4,v5... each time when update github
-	const toolConfigVersion = "v3"; // Change this version string with each new update
+	const toolConfigVersion = "v2"; // Change this version string with each new update
 	const storedVersion = localStorage.getItem("toolConfigVersion");
 
 	if (storedVersion !== toolConfigVersion) {
@@ -375,10 +375,6 @@
     { name: 'Pulsedive', url:'https://pulsedive.com/ioc/', desc:'Search any domain, IP, or URL and enrich on-demand with passive and active scans to inform your investigation.'},
 	
     { name: 'Abuse IP DB', url:'https://www.abuseipdb.com/check/', desc:'Check the report history of any IP address to see if anyone else has reported malicious activities.'},
-    
-	{ name: 'Censys', url:'https://search.censys.io/search?resource=hosts&sort=RELEVANCE&per_page=25&virtual_hosts=EXCLUDE&q=', desc:'Search an IP address, name, protocol or field: value'},
-	
-    { name:'Netcraft', url:'https://searchdns.netcraft.com/?restriction=site+contains&host=', desc:'Domain tech info'},
 	
     { name:'WhoisXML', url:'https://whois.whoisxmlapi.com/lookup?q=', desc:'Gather all the registration information from a domain’s or an IP address’s corresponding WHOIS records.'},
 	
@@ -538,19 +534,168 @@
 	
     { name:'Voilanorbert', url:'https://www.voilanorbert.com/', desc:'can find anyone s email address', skipSearch: true},
 	
-    { name:'Email Checker', url:'https://email-checker.net/', desc:'A simple tool to check whether an email address exists.', skipSearch: true}
-  ],
-  "ATTACK SURFACE": [
-    { name:'FullHunt', url:'https://fullhunt.io/', desc:'Expose your attack surface', skipSearch: true},
+    { name:'Email Checker', url:'https://email-checker.net/', desc:'A simple tool to check whether an email address exists.', skipSearch: true},
 	
-    { name:'Netlas', url:'https://app.netlas.io/', desc:'Discover, scan and monitor any online assets', skipSearch: true}
+	{ name:'Breach Directory', url:'https://breachdirectory.org/', desc:'Check if your email or username was compromised', skipSearch: true},
+	
+	{
+	  name: "MXToolbox Blacklist",
+	  template: "https://mxtoolbox.com/SuperTool.aspx?action=blacklist%3a{{query}}&run=toolpage",
+	  desc: "Check if a domain is blacklisted via MXToolbox"
+	}
+
+	
   ],
+  
+  "EMAIL HEADER ANALYSIS": [
+	  {
+		name: "RFC822 Parser",
+		url: "https://www.whatismyip.com/email-header-analyzer/",
+		desc: "Email Header Analyzer and RFC822 parser", 
+		skipSearch: true
+	  },
+	  {
+		name: "Mailheader",
+		url: "https://mailheader.org/",
+		desc: "Online email header parser and spam analysis", 
+		skipSearch: true
+	  },
+	  {
+		name: "Message header (Google)",
+		url: "https://toolbox.googleapps.com/apps/messageheader/",
+		desc: "Google Message Header Analyzer", 
+		skipSearch: true
+	  },
+	  {
+		name: "Azure Header Analyzer",
+		url: "https://mha.azurewebsites.net/",
+		desc: "Microsoft email message header analyzer", 
+		skipSearch: true
+	  },
+	  {
+		name: "Glock Apps",
+		url: "https://glockapps.com/domain-checker/?domain=",
+		desc: "Check If Your Domain Is Protected"
+	  }
+	],	
+	
+  "ATTACK SURFACE": [
+	  { name:'FullHunt', url:'https://fullhunt.io/', desc:'Expose your attack surface', skipSearch: true},
+	
+	  { name:'Soc Radar', url:'https://socradar.io/labs/external-attack-surface/', desc:'External Attack Surface', skipSearch: true},
+		
+	  { name:'Netlas', url:'https://app.netlas.io/', desc:'Discover, scan and monitor any online assets', skipSearch: true},
+		
+	  { name: 'Censys', url:'https://search.censys.io/search?resource=hosts&sort=RELEVANCE&per_page=25&virtual_hosts=EXCLUDE&q=', desc:'Search an IP address, name, protocol or field: value'},
+		
+	  {
+		name: "ZoomEye",
+		url: "https://www.zoomeye.ai/",
+		desc: "Cyberspace search engine for discovering assets and vulnerabilities",
+		skipSearch: true
+	  },
+	  { name:'Netcraft', url:'https://searchdns.netcraft.com/?restriction=site+contains&host=', desc:'Domain tech info'},
+	  {
+		name: "WhatCMS",
+		url: "https://whatcms.org/",
+		desc: "Identify the CMS a website is using",
+		skipSearch: true
+	  },
+	  {
+		name: "Greenbone",
+		url: "https://www.greenbone.net/en/greenbone-free/",
+		desc: "Open-source vulnerability scanning and management platform",
+		skipSearch: true
+	  },
+	  {
+		name: "Nuclei",
+		url: "https://github.com/projectdiscovery/nuclei",
+		desc: "Fast and customizable vulnerability scanner based on templates",
+		skipSearch: true
+	  }	
+  ],
+  
   "VULNERABILITY DATABASE": [
-    { name:'Vulners', url:'https://vulners.com/', desc:'Searching through 3M+ vulnerabilities and exploits', skipSearch: true},
-    { name:'ExploitDB', url:'https://www.exploit-db.com/', desc:'Exploit Database', skipSearch: true}
+	  { name:'Vulners', url:'https://vulners.com/', desc:'Searching through 3M+ vulnerabilities and exploits', skipSearch: true},
+	  { name:'ExploitDB', url:'https://www.exploit-db.com/', desc:'Exploit Database', skipSearch: true},
+	  {
+		name: "AttackerKB",
+		url: "https://attackerkb.com/activity-feed",
+		desc: "Vulnerability insights with attacker focus from Rapid7",
+		skipSearch: true
+	  },
+	  {
+		name: "CISA KEV Catalog",
+		url: "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+		desc: "CISA's catalog of actively exploited vulnerabilities",
+		skipSearch: true
+	  },
+	  {
+		name: "NVD (NIST)",
+		url: "https://nvd.nist.gov/",
+		desc: "National Vulnerability Database by NIST",
+		skipSearch: true
+	  },
+	  {
+		name: "Feedly CVE",
+		url: "https://feedly.com/cve",
+		desc: "Track and follow CVE disclosures via Feedly",
+		skipSearch: true
+	  },
+	  {
+		name: "CVE.org",
+		url: "https://www.cve.org/",
+		desc: "Official CVE database and identifiers by MITRE",
+		skipSearch: true
+	  },
+	  {
+		name: "SOCRadar",
+		url: "https://socradar.io/labs/app/cve-radar",
+		desc: "Interactive visual radar for trending vulnerabilities",
+		skipSearch: true
+	  },
+	  {
+		name: "CVEMon",
+		url: "https://cvemon.intruder.io/",
+		desc: "Live CVE monitoring tool by Intruder",
+		skipSearch: true
+	  },
+	  {
+		name: "VulnCheck XDB",
+		url: "https://vulncheck.com/xdb",
+		desc: "Exploit intelligence and enrichment for vulnerabilities",
+		skipSearch: true
+	  },
+	  {
+		name: "CVEShield",
+		url: "https://www.cveshield.com/",
+		desc: "See if your software stack is affected by specific CVEs",
+		skipSearch: true
+	  },
+	  {
+		name: "CVE Sky (GreyNoise)",
+		url: "https://cvesky.labs.greynoise.io/",
+		desc: "GreyNoise perspective on CVE exploitation and noise vs signal",
+		skipSearch: true
+	  },
+	  {
+		name: "CVE Details",
+		url: "https://www.cvedetails.com/",
+		desc: "CVE search engine with vendor and product breakdowns",
+		skipSearch: true
+	  }
   ],
+  
   "OTHERS": [
-    { name:'Intezer', url:'https://analyze.intezer.com/', desc:'intezer', skipSearch: true},
+  
+    {
+		name: "Uncoder IO",
+		url: "https://tdm.socprime.com/uncoder-ai",
+		desc: "Threat Detection Marketplace", 
+		skipSearch: true
+	},
+    
+	{ name:'Intezer', url:'https://analyze.intezer.com/', desc:'intezer', skipSearch: true},
     
 	{ name:'Browserling', url:'https://www.browserling.com/', desc:'Start browsing in 5 seconds!', skipSearch: true},
     
@@ -568,8 +713,6 @@
 	
     { name:'ThreatView', url:'https://threatview.io/', desc:'Actionable cyber threat intelligence feeds', skipSearch: true},
 	
-    { name:'PhishTank', url:'https://www.phishtank.com/', desc:'Found a phishing site? ', skipSearch: true},
-	
 	{ name:'Centralops All', url:'https://centralops.net/co/', desc:'Email, Ping, Traceroute, NsLookup - Dig ', skipSearch: true},
 	
     { name:'Cloudflare Radar', url:'https://radar.cloudflare.com/scan', desc:'URL Scanner', skipSearch: true},
@@ -583,12 +726,8 @@
     { name:'Socradar Tools', url:'https://socradar.io/labs/soc-tools/ip-reputation', desc:'Soc Tools', skipSearch: true},
 	
     { name:'Sophos Intel', url:'https://intelix.sophos.com/url', desc:'Submit your file or URL, get back reports from a full analysis using SophosLabs Intelix.', skipSearch: true},
-    
-	{ name:'Check Phish', url:'https://checkphish.bolster.ai/', desc:'CheckPhish is a free real-time URL scanner providing deep threat intelligence, including screenshots, certificates, DOM Tree, and hosting details. ', skipSearch: true},
 	
     { name:'RocketReach', url:'https://rocketreach.co/person', desc:'Tell us what you are looking for: LinkedIn URL, Job Title, Industry etc.', skipSearch: true},
-	
-    { name:'ZoomEye', url:'https://www.zoomeye.org/', desc:'zoomeye', skipSearch: true},
 	
     { name:'OSINT Framework', url:'https://osintframework.com/', desc:'Osint Framework', skipSearch: true},
 	
@@ -604,8 +743,204 @@
 	
 	{ name:'Web Page to PDF', url:'https://www.ipvoid.com/webpage-to-pdf/', desc:'Convert Web Page to PDF', skipSearch: true},
 	
-	{ name:'Domain Age Checker', url:'https://www.ipvoid.com/domain-age-checker/', desc:'Domain age checker', skipSearch: true}	
+	{ name:'Domain Age Checker', url:'https://www.ipvoid.com/domain-age-checker/', desc:'Domain age checker', skipSearch: true}	,
+	
+	{ name:'Info is Beauy', url:'https://informationisbeautiful.net/visualizations/worlds-biggest-data-breaches-hacks/', desc:'Selected events over 30,000 records stolen', skipSearch: true},
+	
+	{
+	  name: "BrightCloud Lookup",
+	  url: "https://www.brightcloud.com/tools/url-ip-lookup.php",
+	  desc: "Check URL or IP reputation using BrightCloud threat intelligence",
+	  skipSearch: true
+	},
+	
+	{
+	  name: "Cyscan",
+	  url: "https://cyscan.io/",
+	  desc: "All-in-one OSINT tool for scanning and analyzing domains, IPs, and URLs",
+	  skipSearch: true
+	},
+	
+	{
+	  name: "Cybergordon",
+	  url: "https://cybergordon.com/",
+	  desc: "CyberGordon quickly provides you threat and risk information about observables like IP address or web domain.",
+	  skipSearch: true
+	},
+	{
+	  name: "Palo Alto",
+	  url: "https://urlfiltering.paloaltonetworks.com/",
+	  desc: "Check URL categories and reputation using Palo Alto's threat intelligence",
+	  skipSearch: true
+	},
+	{
+	  name: "Regex 101",
+	  url: "https://regex101.com/",
+	  desc: "Regular expression",
+	  skipSearch: true
+	},
+	{
+	  name: "Crack Station",
+	  url: "https://crackstation.net/",
+	  desc: "Free Password Hash Cracker",
+	  skipSearch: true
+	},
+	{
+	  name: "Pic2Map",
+	  url: "https://www.pic2map.com/",
+	  desc: "Pic2Map Photo Location Viewer",
+	  skipSearch: true
+	},
+	{
+	  name: "Steganography",
+	  url: "https://stylesuxx.github.io/steganography/",
+	  desc: "Steganography- Encode,Decode",
+	  skipSearch: true
+	},
+	{
+	  name: "DOCX Metadata",
+	  url: "https://products.groupdocs.app/metadata/docx",
+	  desc: "View, read, edit and change DOCX properties",
+	  skipSearch: true
+	},
+	{
+		name: "STIX Project",
+		url: "https://stixproject.github.io/",
+		desc: "Structured Threat Information Expression (STIX)",
+		skipSearch: true
+	  },
+	  {
+		name: "TAXII Project",
+		url: "https://taxiiproject.github.io/",
+		desc: "Trusted Automated Exchange of Intelligence Information (TAXII) protocol for sharing cyber threat data",
+		skipSearch: true
+	  },
+	  {
+		name: "Ransomware.live",
+		url: "https://www.ransomware.live/",
+		desc: "Live ransomware leak site tracker with data on incidents and groups",
+		skipSearch: true
+	  },
+	  {
+		name: "Ransom DB",
+		url: "https://www.ransom-db.com/",
+		desc: "Searchable ransomware leak and extortion database",
+		skipSearch: true
+	  },
+	  {
+		name: "CISA",
+		url: "https://www.cisa.gov/stopransomware",
+		desc: "CISA’s official ransomware guidance, alerts, and response center",
+		skipSearch: true
+	  }
   ],
+  
+  "FILE & MALWARE ANALYSIS": [
+	  {
+		name: "Virus Total",
+		url: "https://www.virustotal.com/gui/home/upload",
+		desc: "Analyze suspicious files and URLs for malware", 
+		skipSearch: true
+	  },	 
+	  
+	  {
+		name: "YARA ify",
+		url: " https://yaraify.abuse.ch/scan/",
+		desc: "Hunt across all abuse.ch platforms with one simple query", 
+		skipSearch: true
+	  },
+	  
+	  {
+		name: "Any Run",
+		url: "https://app.any.run/",
+		desc: "", 
+		skipSearch: true
+	  },	  
+	  
+	  {
+		name: "Docguard.io",
+		url: "https://www.docguard.io/",
+		desc: "Analyze document-based malware", 
+		skipSearch: true
+	  },
+	  {
+		name: "FileScan.IO",
+		url: "https://www.filescan.io/",
+		desc: "File scanning and behavioral malware analysis", 
+		skipSearch: true
+	  },
+	  {
+		name: "Cuckoo Sandbox",
+		url: "https://cuckoo.cert.ee/",
+		desc: "Open-source automated malware analysis system", 
+		skipSearch: true
+	  },
+	  {
+		name: "CAPE Sandbox",
+		url: "https://capesandbox.com/",
+		desc: "Custom Analysis of Potentially Exploitable files (CAPE)", 
+		skipSearch: true
+	  },
+	  {
+		name: "Joe Sandbox",
+		url: "https://www.joesandbox.com/",
+		desc: "Deep malware analysis sandbox supporting multiple platforms", 
+		skipSearch: true
+	  },
+	  {
+		name: "Hybrid Analysis",
+		url: "https://www.hybrid-analysis.com/",
+		desc: "Free malware analysis powered by CrowdStrike Falcon Sandbox", 
+		skipSearch: true
+	  }
+	  	  
+	],
+	
+	"MALWARE FEEDS": [
+	  {
+		name: "Malware Traffic Analysis",
+		url: "https://www.malware-traffic-analysis.net/",
+		desc: "PCAPs and write-ups from real-world malware traffic captures",
+		skipSearch: true
+	  },
+	  {
+		name: "Abuse.ch",
+		url: "https://abuse.ch/",
+		desc: "Swiss-based open threat intelligence project for tracking malware and botnets",
+		skipSearch: true
+	  },
+	  {
+		name: "MalwareBazaar",
+		url: "https://bazaar.abuse.ch/",
+		desc: "Search and download malicious files shared by the community",
+		skipSearch: true
+	  },
+	  {
+		name: "Feodo Tracker",
+		url: "https://feodotracker.abuse.ch/",
+		desc: "Tracks IPs and C2s associated with the Feodo/Bredo malware family",
+		skipSearch: true
+	  },
+	  {
+		name: "SSL Blacklist (SSLBL)",
+		url: "https://sslbl.abuse.ch/",
+		desc: "Tracks suspicious SSL certificates and JA3 fingerprints",
+		skipSearch: true
+	  },
+	  {
+		name: "URLhaus",
+		url: "https://urlhaus.abuse.ch/",
+		desc: "Database of malicious URLs used to distribute malware",
+		skipSearch: true
+	  },
+	  {
+		name: "ThreatFox",
+		url: "https://threatfox.abuse.ch/",
+		desc: "Community-driven platform to share IOCs for active threats",
+		skipSearch: true
+	  }
+	],
+
 	
   "AI TOOLS": [
 	  { name: 'ChatGPT', url: 'https://chatgpt.com/', desc: 'OpenAI’s powerful conversational AI', skipSearch: true },
@@ -614,7 +949,14 @@
 	  { name: 'Copilot', url: 'https://copilot.microsoft.com/', desc: 'Microsoft’s AI companion across the web', skipSearch: true },
 	  { name: 'Perplexity', url: 'https://www.perplexity.ai/', desc: 'AI-powered answer engine for real-time research', skipSearch: true },
 	  { name: 'Consensus', url: 'https://consensus.app/', desc: 'AI tool to find scientific consensus from research papers', skipSearch: true },
-	  { name: 'Notion AI', url: 'https://www.notion.so/', desc: 'Notion’s AI assistant integrated into workspace tools', skipSearch: true }
+	  { name: 'Notion AI', url: 'https://www.notion.so/', desc: 'Notion’s AI assistant integrated into workspace tools', skipSearch: true },
+	  { name: 'Perplexity', url: 'https://www.perplexity.ai/', desc: 'perplexity', skipSearch: true },
+	  { name: 'Notebook LM', url: 'https://notebooklm.google.com/', desc: 'NotebookLM is an AI-powered research and writing assistant that works best with the sources you upload', skipSearch: true },
+	 
+	 { name: ' Cursor', url: 'https://www.cursor.com/', desc: 'Built to make you extraordinarily productive, Cursor is the best way to code with AI.', skipSearch: true },
+	 
+	 { name: ' Void', url: 'https://voideditor.com/', desc: 'The open source AI code editor.', skipSearch: true } 
+	 
 	],
 
 	"USERNAME & PEOPLE OSINT": [
@@ -628,7 +970,7 @@
 	  { name: 'TrueCaller', url: 'https://www.truecaller.com/', desc: 'Phone number lookup and spam call protection', skipSearch: true },
 	  { name: 'IntelX Facebook Tool', url: 'https://intelx.io/tools?tab=facebook', desc: 'Facebook search and discovery via IntelligenceX', skipSearch: true },
 	  { name: 'ImgInn', url: 'https://imginn.com/', desc: 'View Instagram profiles anonymously', skipSearch: true },
-	  { name: 'aiHitData', url: 'https://www.aihitdata.com/', desc: 'Track company and people changes across organizations', skipSearch: true }
+	  { name: 'AI Hit Data', url: 'https://www.aihitdata.com/', desc: 'Track company and people changes across organizations', skipSearch: true }
 	],
 
 	"WEBSITE OSINT TOOLS": [
@@ -651,6 +993,172 @@
 	  { name: 'Disconnect Search', url: 'https://search.disconnect.me/', desc: 'Private search engine powered by major providers', skipSearch: true }
 	],
 	
+	"REAL TIME THREAT MAPS": [
+	  {
+		name: "Checkpoint",
+		url: "https://threatmap.checkpoint.com/",
+		desc: "Global cyber attack visualization from Checkpoint", 
+		skipSearch: true
+	  },
+	  {
+		name: "Kaspersky",
+		url: "https://cybermap.kaspersky.com/",
+		desc: "Live cyber threat intelligence map by Kaspersky", 
+		skipSearch: true
+	  },
+	  {
+		name: "Radware Live",
+		url: "https://livethreatmap.radware.com/",
+		desc: "Real-time DDoS and attack map by Radware", 
+		skipSearch: true
+	  },
+	  {
+		name: "Digital Attack",
+		url: "https://www.digitalattackmap.com/",
+		desc: "Visualizes DDoS attacks using data from Google and Arbor Networks", 
+		skipSearch: true
+	  },
+	  {
+		name: "NETSCOUT Horizon",
+		url: "https://horizon.netscout.com/",
+		desc: "Interactive cyber threat landscape by NETSCOUT", 
+		skipSearch: true
+	  },
+	  {
+		name: "Bitdefender",
+		url: "https://threatmap.bitdefender.com/",
+		desc: "Live view of global cybersecurity threats by Bitdefender", 
+		skipSearch: true
+	  },
+	  {
+		name: "Fortinet",
+		url: "https://fortiguard.fortinet.com/threat-map",
+		desc: "Live global threat intelligence from FortiGuard Labs", 
+		skipSearch: true
+	  },
+	  {
+		name: "Imperva Cyber Map",
+		url: "https://www.imperva.com/cyber-threat-attack-map",
+		desc: "Live global attack visualizer by Imperva", 
+		skipSearch: true
+	  },
+	  {
+		name: "Threatbutt Map",
+		url: "https://threatbutt.com/map",
+		desc: "Parody cyber threat map with real-time style flair", 
+		skipSearch: true
+	  },
+	  {
+		name: "Cisco Talos Pulse",
+		url: "https://talosintelligence.com/fullpage_maps/pulse",
+		desc: "Cisco Talos threat intelligence visualization", 
+		skipSearch: true
+	  },
+	  {
+		name: "SonicWall",
+		url: "https://securitycenter.sonicwall.com/m/page/worldwide-attacks",
+		desc: "Real-time visualization of global cyber attacks from SonicWall", 
+		skipSearch: true
+	  }
+	  
+	],	
+	
+	"PHISHING ANALYSIS": [
+	  {
+		name: "PhishTank",
+		url: "https://www.phishtank.com/",
+		desc: "Community-based phishing verification and feeds", 
+		skipSearch: true
+	  },
+	  
+	  { 
+	    name:'Check Phish', url:'https://checkphish.bolster.ai/', 
+	    desc:'CheckPhish is a free real-time URL scanner providing deep threat intelligence, including screenshots, certificates, DOM Tree, and hosting details. ', 
+		skipSearch: true},
+	  
+	  {
+		name: "ScamSearch",
+		url: "https://scamsearch.io/",
+		desc: "Search engine for known scam and phishing websites", 
+		skipSearch: true
+	  },
+	  {
+		name: "dnstwist",
+		url: "https://dnstwist.it/",
+		desc: "Phishing domain scanner", 
+		skipSearch: true
+	  },
+	  {
+		name: "Bluecoat Site Review",
+		url: "https://sitereview.bluecoat.com/#/lookup-result/",
+		desc: "Check web reputation and categories of URLs"
+	  },
+	  {
+		name: "Fortiguard Web Filter",
+		url: "https://fortiguard.com/webfilter",
+		desc: "Fortinet web filter and threat classification", 
+		skipSearch: true
+	  },
+	  {
+		name: "dnstwister.report",
+		url: "https://dnstwister.report/",
+		desc: "Monitor Your Domain for Impersonators", 
+		skipSearch: true
+	  },
+	  
+	  {
+		name: "PhishTool",
+		url: "https://www.phishtool.com/",
+		desc: "Phishing investigation and case management tool", 
+		skipSearch: true
+	  },
+	  
+	  {
+		name: "OpenPhish",
+		url: "https://openphish.com/",
+		desc: "Automated phishing threat intelligence and feed", 
+		skipSearch: true
+	  }
+	],
+	
+	"APT GROUPS": [
+	  {
+		name: "MITRE APT Groups",
+		url: "https://attack.mitre.org/groups/",
+		desc: "List of known APT groups tracked by MITRE ATT&CK",
+		skipSearch: true
+	  },
+	  
+	  {
+		name: "Cyber Kill Chain",
+		url: "https://www.lockheedmartin.com/en-us/capabilities/cyber/cyber-kill-chain.html",
+		desc: "Lockheed Martin’s Cyber Kill Chain for mapping intrusion stages",
+		skipSearch: true
+	  },
+	  
+	  {
+		name: "SOCRadar ThreatActors",
+		url: "https://socradar.io/threat-intelligence/threat-actors/",
+		desc: "Browse known threat actors and APT groups by SOCRadar",
+		skipSearch: true
+	  },
+	  
+	  {
+		name: "OSINT Framework",
+		url: "https://osintframework.com/",
+		desc: "Collection of OSINT tools and resources including APT tracking",
+		skipSearch: true
+	  },
+	  
+	  {
+		name: "Malfrat's Map",
+		url: "https://map.malfrats.industries/",
+		desc: "Malfrat's OSINT Map",
+		skipSearch: true
+	  }	 
+	],
+
+
   "CODE SEARCH": [
     {name: "Grep",url: "https://grep.app/",desc: "Codes Search", skipSearch: true},
 	
@@ -1100,6 +1608,20 @@ function openFavorites()
 }
 
   </script>	 
+  
+  <script> // Used CounterAPI to Show Visit Count on the Site 
+  fetch("https://api.counterapi.com/api/v1/hit/ekky19.github.io/osint")
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("visit-count").innerText = data.value;
+    })
+    .catch(err => {
+      console.error("Visit counter error:", err);
+      document.getElementById("visit-count").innerText = "N/A";
+    });
+</script>
+
+
 <footer style="margin-top: 3rem; text-align: center; font-size: 0.95rem; padding: 1rem 0; border-top: 1px solid var(--muted); color: var(--muted); transition: all 0.3s ease;">
   🛡️ Made for defenders, by 
   <a href="https://www.linkedin.com/in/ekremozdemir19/" 
@@ -1108,7 +1630,13 @@ function openFavorites()
      style="color: var(--primary); font-weight: 600; text-decoration: none; transition: color 0.3s ease;">
     Ekrem O.
   </a>
-  
+  <div id="visit-counter" style="text-align:center; font-size:14px; padding: 10px;">
+  Visits: <span id="visit-count">loading...</span>
+</div>
+
 </footer>
+
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "53ddfce71190425eb86420f0190ad437"}'></script><!-- End Cloudflare Web Analytics -->
+
 </body>
 </html>
