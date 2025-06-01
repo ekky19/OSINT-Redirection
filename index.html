@@ -1608,20 +1608,6 @@ function openFavorites()
 }
 
   </script>	 
-  
-  <script> // Used CounterAPI to Show Visit Count on the Site 
-  fetch("https://api.counterapi.com/api/v1/hit/ekky19.github.io/osint")
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById("visit-count").innerText = data.value;
-    })
-    .catch(err => {
-      console.error("Visit counter error:", err);
-      document.getElementById("visit-count").innerText = "N/A";
-    });
-</script>
-
-
 <footer style="margin-top: 3rem; text-align: center; font-size: 0.95rem; padding: 1rem 0; border-top: 1px solid var(--muted); color: var(--muted); transition: all 0.3s ease;">
   🛡️ Made for defenders, by 
   <a href="https://www.linkedin.com/in/ekremozdemir19/" 
@@ -1630,13 +1616,12 @@ function openFavorites()
      style="color: var(--primary); font-weight: 600; text-decoration: none; transition: color 0.3s ease;">
     Ekrem O.
   </a>
-  <div id="visit-counter" style="text-align:center; font-size:14px; padding: 10px;">
-  Visits: <span id="visit-count">loading...</span>
-</div>
+  
+  <p>
+  <img src="https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fekky19.github.io%2Fosint%2F&countColor=%23263759" alt="Visitors Badge" />
+  </p>
 
 </footer>
-
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "53ddfce71190425eb86420f0190ad437"}'></script><!-- End Cloudflare Web Analytics -->
-
 </body>
 </html>
